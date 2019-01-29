@@ -22,12 +22,18 @@ public class SpawnKnight : MonoBehaviour
 
     }
 
-    public void Spawn()
+    public void HandleClick() {
+        Vector3 position = new Vector3(ran.Next(-2, 2), 0, ran.Next(-4, 4));
+        Spawn(position, Quaternion.identity);
+    }
+
+    public void Spawn(Vector3 position, Quaternion rotation)
     {
-        Vector3 position = new Vector3(0, 0, ran.Next(-4, 4));
         if (knightPrefab != null)
         {
-            Instantiate(knightPrefab, position, Quaternion.identity, gameBoard);
+            GameObject knight = Instantiate(knightPrefab, gameBoard) as GameObject;
+            knight.transform.localScale = new Vector3(.2f, .2f, .2f);
+            knight.transform.localPosition = position;
         }
     }
 }
