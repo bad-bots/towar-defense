@@ -7,6 +7,7 @@ public class SpawnKnight : MonoBehaviour
 {
     public GameObject knightPrefab;
     public Transform gameBoard;
+    public Transform target;
     public System.Random ran = new System.Random();
 
     public List<GameObject> createdObjects = new List<GameObject>();
@@ -34,6 +35,7 @@ public class SpawnKnight : MonoBehaviour
             GameObject knight = Instantiate(knightPrefab, gameBoard) as GameObject;
             knight.transform.localScale = new Vector3(.2f, .2f, .2f);
             knight.transform.localPosition = position;
+            knight.GetComponent<UnitMovementBehaviour>().target = target;
         }
     }
 }
