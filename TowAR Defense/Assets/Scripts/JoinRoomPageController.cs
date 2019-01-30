@@ -10,7 +10,6 @@ public class JoinRoomPageController : MonoBehaviour
 
   void Start()
   {
-    NetworkManager.instance.StartGameEvent += OnStartGame;
     NetworkManager.instance.IncorrectRoomCodeEvent += OnIncorrectGameCode;
   }
 
@@ -18,11 +17,6 @@ public class JoinRoomPageController : MonoBehaviour
   {
     string roomCode = roomCodeInput.text;
     NetworkManager.instance.CommandJoinRoom(roomCode);
-  }
-
-  private void OnStartGame()
-  {
-    GetComponent<SceneSwitcher>().SwitchScene();
   }
 
   private void OnIncorrectGameCode()

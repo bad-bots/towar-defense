@@ -1731,7 +1731,6 @@ GameObject:
   m_Component:
   - component: {fileID: 875198651}
   - component: {fileID: 875198652}
-  - component: {fileID: 875198653}
   m_Layer: 5
   m_Name: JoinRoomPage
   m_TagString: Untagged
@@ -1774,21 +1773,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomCodeInput: {fileID: 1810748131}
   wrongCodeText: {fileID: 1258855670}
---- !u!114 &875198653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875198650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scene:
-    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
-    m_SceneName: GameScene
 --- !u!1 &875442563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,7 +1862,6 @@ GameObject:
   m_Component:
   - component: {fileID: 924681374}
   - component: {fileID: 924681375}
-  - component: {fileID: 924681376}
   m_Layer: 5
   m_Name: CreateRoomPage
   m_TagString: Untagged
@@ -1923,21 +1906,6 @@ MonoBehaviour:
   roomCodeText: {fileID: 996020643}
   roomNameInput: {fileID: 40274694}
   button: {fileID: 808641519}
---- !u!114 &924681376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924681373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scene:
-    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
-    m_SceneName: GameScene
 --- !u!1 &996020641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,6 +2710,8 @@ GameObject:
   - component: {fileID: 1993237706}
   - component: {fileID: 1993237709}
   - component: {fileID: 1993237708}
+  - component: {fileID: 1993237710}
+  - component: {fileID: 1993237707}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -2771,6 +2741,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1993237707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993237705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64e8a63ea35b9e40bbc115cc28da0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1993237708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2808,6 +2790,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993237705}
   m_CullTransparentMesh: 0
+--- !u!114 &1993237710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993237705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
 --- !u!1 &2039055490
 GameObject:
   m_ObjectHideFlags: 0
