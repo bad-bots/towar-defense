@@ -590,9 +590,9 @@ RectTransform:
   m_Father: {fileID: 1346153991}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -18}
   m_SizeDelta: {x: 160, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &115770162
@@ -1023,9 +1023,9 @@ RectTransform:
   m_Father: {fileID: 2039055491}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -105.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &536352164
@@ -1404,9 +1404,9 @@ RectTransform:
   m_Father: {fileID: 2039055491}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -60.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &804671265
@@ -1730,13 +1730,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 875198651}
+  - component: {fileID: 875198652}
+  - component: {fileID: 875198653}
   m_Layer: 5
   m_Name: JoinRoomPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &875198651
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1758,6 +1760,35 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &875198652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875198650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f69eef8edf03034fa764e3f75258a27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomCodeInput: {fileID: 1810748131}
+  wrongCodeText: {fileID: 1258855670}
+--- !u!114 &875198653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875198650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
 --- !u!1 &875442563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,6 +1878,7 @@ GameObject:
   m_Component:
   - component: {fileID: 924681374}
   - component: {fileID: 924681375}
+  - component: {fileID: 924681376}
   m_Layer: 5
   m_Name: CreateRoomPage
   m_TagString: Untagged
@@ -1891,6 +1923,21 @@ MonoBehaviour:
   roomCodeText: {fileID: 996020643}
   roomNameInput: {fileID: 40274694}
   button: {fileID: 808641519}
+--- !u!114 &924681376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924681373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
 --- !u!1 &996020641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,7 +2315,6 @@ GameObject:
   - component: {fileID: 1711321699}
   - component: {fileID: 1711321698}
   - component: {fileID: 1711321697}
-  - component: {fileID: 1711321700}
   m_Layer: 5
   m_Name: JoinRoomButton
   m_TagString: Untagged
@@ -2291,9 +2337,9 @@ RectTransform:
   m_Father: {fileID: 1346153991}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -101}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1711321697
@@ -2336,7 +2382,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1711321700}
+      - m_Target: {fileID: 875198652}
         m_MethodName: HandleClick
         m_Mode: 1
         m_Arguments:
@@ -2386,21 +2432,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711321695}
   m_CullTransparentMesh: 0
---- !u!114 &1711321700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1711321695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f69eef8edf03034fa764e3f75258a27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomCodeInput: {fileID: 1810748131}
-  testJSON: '{"joinToken":"1","player1":{"socketId":"Rf7LSLs284isJqwBAAAB","castleHealth":1000,"doubloons":10000,"phonePosition":[1,1,1],"coolDowns":{"unitType":0},"meta":{"revision":0,"created":1.548878E+12,"version":0},"$loki":1},"player2":{"socketId":"2ZrSt048fhLECK0xAAAC","castleHealth":1000,"doubloons":10000,"phonePosition":[1,1,1],"coolDowns":{"unitType":0},"meta":{"revision":0,"created":1.548878E+12,"version":0},"$loki":2},"roomName":"Player1''s
-    Room","gameStatus":"inPlay","units":null,"meta":{"revision":0,"created":1.548878E+12,"version":0},"$loki":1}'
 --- !u!1 &1714854393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,9 +2546,9 @@ RectTransform:
   m_Father: {fileID: 1346153991}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -56}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1810748131
@@ -2653,9 +2684,9 @@ RectTransform:
   m_Father: {fileID: 2039055491}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -20.25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1962637098
@@ -2793,7 +2824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2039055491
 RectTransform:
   m_ObjectHideFlags: 0

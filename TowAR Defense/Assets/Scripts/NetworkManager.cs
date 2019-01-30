@@ -90,7 +90,6 @@ public class NetworkManager : MonoBehaviour
 
   private void HandleStartGame(SocketIOEvent obj)
   {
-    Debug.Log(obj.data);
     StartGameEvent();
   }
 

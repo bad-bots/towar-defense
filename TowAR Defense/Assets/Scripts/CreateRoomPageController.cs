@@ -10,6 +10,11 @@ public class CreateRoomPageController : MonoBehaviour
   public InputField roomNameInput;
   public GameObject button;
 
+  void Start()
+  {
+    NetworkManager.instance.StartGameEvent += OnStartGame;
+  }
+
   public void HandleCreateRoom()
   {
     string roomName = roomNameInput.text;
@@ -25,6 +30,11 @@ public class CreateRoomPageController : MonoBehaviour
     roomCodeText.gameObject.SetActive(true);
     roomNameInput.interactable = false;
     button.SetActive(false);
+  }
+
+  private void OnStartGame()
+  {
+    GetComponent<SceneSwitcher>().SwitchScene();
   }
 
 }
