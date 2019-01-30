@@ -14,7 +14,7 @@ public class SpawnKnight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NetworkManager.instance.RegisterSpawnKnightListener(Spawn);
+        NetworkManager.instance.SpawnKnightEvent += Spawn;
     }
 
     // Update is called once per frame
