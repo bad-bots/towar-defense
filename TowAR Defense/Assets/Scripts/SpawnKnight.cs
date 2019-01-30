@@ -14,7 +14,7 @@ public class SpawnKnight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        NetworkManager.instance.RegisterSpawnKnightListener(Spawn);
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class SpawnKnight : MonoBehaviour
 
     public void HandleClick() {
         Vector3 position = new Vector3(ran.Next(-2, 2), 0, ran.Next(-4, 4));
-        Spawn(position, Quaternion.identity);
+        NetworkManager.instance.CommandSpawn(position);
     }
 
     public void Spawn(Vector3 position, Quaternion rotation)
