@@ -10,13 +10,18 @@ public class NetworkManager : MonoBehaviour
   public static NetworkManager instance = null;
   public Action onSpawnKnight = null;
 
-  public event Action<Vector3, Quaternion> SpawnKnightEvent;
   #endregion
 
   #region Private Members
   private SocketIOComponent socket;
 
   private Action<string> m_createRoomAcks;
+  #endregion
+
+  #region Socket Events
+  public event Action<Vector3, Quaternion> SpawnKnightEvent;
+  public event Action StartGameEvent;
+  public event Action IncorrectRoomCodeEvent;
   #endregion
 
   #region MONOBEHAVIOUR_METHODS
@@ -36,7 +41,9 @@ public class NetworkManager : MonoBehaviour
   {
     this.socket = this.GetComponent<SocketIOComponent>();
 
-    socket.On("spawn unit", HandleSpawnKnight);
+    socket.On("spawn", HandleSpawnKnight);
+    socket.On("incorrectGameToken", HandleIncorrectRoomCode);
+    socket.On("start", HandleStartGame);
   }
 
   #endregion /* MONOBEHAVIOUR_METHODS */
@@ -81,6 +88,17 @@ public class NetworkManager : MonoBehaviour
 
   }
 
+  private void HandleStartGame(SocketIOEvent obj)
+  {
+    Debug.Log(obj.data);
+    StartGameEvent();
+  }
+
+  private void HandleIncorrectRoomCode(SocketIOEvent obj)
+  {
+    IncorrectRoomCodeEvent();
+  }
+
   #endregion
 
   #region Commands
@@ -89,13 +107,11 @@ public class NetworkManager : MonoBehaviour
   {
     m_createRoomAcks += ack;
     this.socket.Emit("init", JSONObject.CreateStringObject(roomName), AckCreateRoom);
-    // var json = JSONObject.CreateStringObject(roomName);
-    // this.socket.Emit("init", json);
   }
 
   public void CommandJoinRoom(string roomCode)
   {
-    this.socket.Emit("start", new JSONObject(roomCode));
+    this.socket.Emit("start", JSONObject.CreateStringObject(roomCode));
   }
 
   public void CommandSpawn(Vector3 pos)
@@ -106,7 +122,7 @@ public class NetworkManager : MonoBehaviour
   public void CommandSpawn(Vector3 pos, Quaternion rot)
   {
     string data = JsonUtility.ToJson(new PointJSON(pos, rot));
-    this.socket.Emit("spawn unit", new JSONObject(data));
+    this.socket.Emit("spawn", new JSONObject(data));
   }
 
   #endregion
@@ -186,6 +202,43 @@ public class NetworkManager : MonoBehaviour
     public static UnitJSON CreateFromJSON(string data)
     {
       return JsonUtility.FromJson<UnitJSON>(data);
+    }
+  }
+
+  [Serializable]
+  public class GameStateJSON
+  {
+    public string joinToken;
+    public string roomName;
+    public PlayerJSON player1;
+    public PlayerJSON player2;
+
+    public static GameStateJSON CreateFromJSON(string data)
+    {
+      return JsonUtility.FromJson<GameStateJSON>(data);
+    }
+  }
+
+  [Serializable]
+  public class PlayerJSON
+  {
+    public int castleHealth;
+    public int doubloons;
+    public CoolDownsJSON coolDowns;
+
+    public static PlayerJSON CreateFromJSON(string data)
+    {
+      return JsonUtility.FromJson<PlayerJSON>(data);
+    }
+  }
+
+  public class CoolDownsJSON
+  {
+    public int unitType;
+
+    public static CoolDownsJSON CreateFromJSON(string data)
+    {
+      return JsonUtility.FromJson<CoolDownsJSON>(data);
     }
   }
   #endregion

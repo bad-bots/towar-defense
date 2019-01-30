@@ -10,20 +10,15 @@ public class CreateRoomPageController : MonoBehaviour
   public InputField roomNameInput;
   public GameObject button;
 
-  // Start is called before the first frame update
-  void Start()
-  {
-    //statusMessageText.text = "Loading....";
-  }
-
   public void HandleCreateRoom()
   {
     string roomName = roomNameInput.text;
-    NetworkManager.instance.CommandCreateRoom(roomName, HandleRoomCreate);
+    statusMessageText.text = "Loading....";
+    NetworkManager.instance.CommandCreateRoom(roomName, OnRoomCreated);
 
   }
 
-  private void HandleRoomCreate(string joinToken)
+  private void OnRoomCreated(string joinToken)
   {
     statusMessageText.text = "Created Room!\nGive this code to your buddy!";
     roomCodeText.text = joinToken;
