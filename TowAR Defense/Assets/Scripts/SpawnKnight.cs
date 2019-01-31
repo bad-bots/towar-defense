@@ -11,25 +11,22 @@ public class SpawnKnight : MonoBehaviour
   private Transform tower1;
   private Transform tower2;
 
-  void Update()
+  void Start()
   {
-    if (gameBoard == null)
+    gameBoard = GameObject.FindGameObjectWithTag("Game Board").transform;
+    if (gameBoard == null) return;
+
+    var towers = GameObject.FindGameObjectsWithTag("Tower");
+    if (towers[0].name == "Tower1")
     {
-      gameBoard = GameObject.FindGameObjectWithTag("Game Board").transform;
-      if (gameBoard == null) return;
+      tower1 = towers[0].transform;
+      tower2 = towers[1].transform;
+    }
+    else
+    {
+      tower1 = towers[1].transform;
+      tower2 = towers[0].transform;
 
-      var towers = GameObject.FindGameObjectsWithTag("Tower");
-      if (towers[0].name == "Tower1")
-      {
-        tower1 = towers[0].transform;
-        tower2 = towers[1].transform;
-      }
-      else
-      {
-        tower1 = towers[1].transform;
-        tower2 = towers[0].transform;
-
-      }
     }
   }
 
