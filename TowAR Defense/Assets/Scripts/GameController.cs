@@ -5,13 +5,14 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
   #region Public Members
-  // [HideInInspector]
+  [HideInInspector]
   public float doubloons;
-  // [HideInInspector]
+  [HideInInspector]
   public bool isPlayer1;
   #endregion
 
   #region Private Members
+  private bool initalized = false;
   private SpawnKnight spawnKnight;
   #endregion
 
@@ -45,8 +46,16 @@ public class GameController : MonoBehaviour
 
   #region Public Methods
 
+  public void Initialize(NetworkManager.PlayerJSON playerData)
+  {
+    doubloons = playerData.doubloons;
+    isPlayer1 = playerData.playerNo == 1;
+    initalized = true;
+  }
+
   public void RequestSpawnUnit()
   {
+    CheckInitialized();
     var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
     var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
     NetworkManager.instance.CommandSpawn(pos, rot);
@@ -54,6 +63,7 @@ public class GameController : MonoBehaviour
 
   public void RequestTowerDamage(int damage = 1)
   {
+    CheckInitialized();
     throw new System.NotImplementedException();
   }
 
@@ -69,5 +79,11 @@ public class GameController : MonoBehaviour
 
   #endregion
 
-
+  #region Private Methods
+  private void CheckInitialized()
+  {
+    if (!initalized)
+      throw new System.InvalidOperationException("Attempted to use GameController before initializing");
+  }
+  #endregion
 }

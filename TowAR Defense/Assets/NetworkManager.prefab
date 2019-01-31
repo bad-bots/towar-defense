@@ -76,8 +76,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64e8a63ea35b9e40bbc115cc28da0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameControllerPrefab: {fileID: 2383218125033968349, guid: 7827493bc60d25c4fba065447d51056d,
-    type: 3}
+  gameScene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
 --- !u!114 &5371901635332089396
 MonoBehaviour:
   m_ObjectHideFlags: 0
