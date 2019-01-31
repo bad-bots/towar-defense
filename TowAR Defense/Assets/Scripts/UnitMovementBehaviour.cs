@@ -14,6 +14,14 @@ public class UnitMovementBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower")) 
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
