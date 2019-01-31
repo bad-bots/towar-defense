@@ -63,6 +63,7 @@ public class GameController : MonoBehaviour
 
   private void OnUnitSpawn(Vector3 position, Quaternion rotation)
   {
+    Debug.Log("Spawning");
     spawnKnight.Spawn(position, rotation, isPlayer1);
   }
 

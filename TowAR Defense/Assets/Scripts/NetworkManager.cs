@@ -57,7 +57,6 @@ public class NetworkManager : MonoBehaviour
     var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
     var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
     SpawnKnightEvent(pos, rot);
-
   }
 
   private void HandleStartGame(SocketIOEvent obj)
