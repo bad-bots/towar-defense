@@ -20,6 +20,7 @@ public class GameStartBehaviour : MonoBehaviour
     var gameCon = conObj.GetComponent<GameController>();
     gameCon.doubloons = playerData.doubloons;
     gameCon.isPlayer1 = playerData.playerNo == 1;
+    gameCon.castleHealth = playerData.castleHealth;
 
     Debug.Log("Switching Scenes...");
     GetComponent<SceneSwitcher>().SwitchScene();

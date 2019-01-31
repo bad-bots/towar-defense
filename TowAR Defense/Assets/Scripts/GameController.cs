@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
   public float doubloons;
   // [HideInInspector]
   public bool isPlayer1;
+  // [HideInInspector]
+  public int castleHealth;
   #endregion
 
   #region Private Members
