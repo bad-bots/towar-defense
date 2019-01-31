@@ -16,8 +16,7 @@ public class UnitMovementBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("tower hit");
-        if (collision.gameObject == target.gameObject && collision.gameObject.CompareTag("Tower")) 
+        if (collision.gameObject.GetInstanceID() == target.gameObject.GetInstanceID() && collision.gameObject.CompareTag("Tower")) 
         {
             Destroy(gameObject);
         }
