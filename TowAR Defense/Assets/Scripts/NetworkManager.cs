@@ -19,7 +19,7 @@ public class NetworkManager : MonoBehaviour
   #endregion
 
   #region Socket Events
-  public event Action<Vector3, Quaternion> SpawnKnightEvent;
+  public event Action<Vector3, Quaternion, bool> SpawnKnightEvent;
   public event Action<PlayerJSON> StartGameEvent;
   public event Action IncorrectRoomCodeEvent;
   #endregion
@@ -56,7 +56,8 @@ public class NetworkManager : MonoBehaviour
     var json = UnitJSON.CreateFromJSON(data);
     var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
     var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
-    SpawnKnightEvent(pos, rot);
+        var isPlayer1 = json.playerNo == 1; 
+    SpawnKnightEvent(pos, rot, isPlayer1);
   }
 
   private void HandleStartGame(SocketIOEvent obj)
@@ -120,6 +121,7 @@ public class NetworkManager : MonoBehaviour
   {
     public float[] position;
     public float[] rotation;
+
     public PointJSON(GameObject obj) : this(obj.transform.position, obj.transform.rotation) { }
 
     public PointJSON(Vector3 _position, Quaternion _rotation)
@@ -141,6 +143,7 @@ public class NetworkManager : MonoBehaviour
   [Serializable]
   public class UnitJSON
   {
+       public int playerNo;
     public float[] position;
     public float[] rotation;
     public string unitType;

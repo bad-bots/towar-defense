@@ -61,10 +61,10 @@ public class GameController : MonoBehaviour
 
   #region Event Handlers
 
-  private void OnUnitSpawn(Vector3 position, Quaternion rotation)
+  private void OnUnitSpawn(Vector3 position, Quaternion rotation, bool _isPlayer1)
   {
     Debug.Log("Spawning");
-    spawnKnight.Spawn(position, rotation, isPlayer1);
+    spawnKnight.Spawn(position, rotation, _isPlayer1);
   }
 
   #endregion
