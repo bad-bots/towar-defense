@@ -19,6 +19,12 @@ public class JoinRoomPageController : MonoBehaviour
     NetworkManager.instance.CommandJoinRoom(roomCode);
   }
 
+public void HandleDebugRoomCLick()
+    {
+        string roomCode = "debug";
+        NetworkManager.instance.CommandJoinRoom(roomCode);
+    }
+
   private void OnIncorrectGameCode()
   {
     wrongCodeText.gameObject.SetActive(true);

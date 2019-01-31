@@ -61,10 +61,18 @@ public class GameController : MonoBehaviour
     NetworkManager.instance.CommandSpawn(pos, rot);
   }
 
-  public void RequestTowerDamage(int damage = 1)
+  public void RequestDebugSpawnUnit()
   {
     CheckInitialized();
-    throw new System.NotImplementedException();
+    var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
+    var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
+    NetworkManager.instance.CommandDebugSpawn(pos, rot);
+  }
+
+  public void RequestTowerDamage(string unitType)
+  {
+    CheckInitialized();
+    NetworkManager.instance.CommandTakeTowerDamage(unitType);
   }
 
   #endregion

@@ -8,4 +8,9 @@ public class UIController : MonoBehaviour
   {
     GameController.instance.RequestSpawnUnit();
   }
+
+    public void DebugSpawnNight()
+    {
+        GameController.instance.RequestDebugSpawnUnit();
+    }
 }
