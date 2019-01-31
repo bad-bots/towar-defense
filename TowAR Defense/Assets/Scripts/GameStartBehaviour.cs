@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameStartBehaviour : MonoBehaviour
 {
   public GameObject gameControllerPrefab;
+  public SceneField gameScene;
 
   // Start is called before the first frame update
   void Start()
@@ -22,6 +23,6 @@ public class GameStartBehaviour : MonoBehaviour
     gameCon.isPlayer1 = playerData.playerNo == 1;
 
     Debug.Log("Switching Scenes...");
-    GetComponent<SceneSwitcher>().SwitchScene();
+    UnityEngine.SceneManagement.SceneManager.LoadScene(gameScene);
   }
 }
