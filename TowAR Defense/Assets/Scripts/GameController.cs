@@ -52,9 +52,16 @@ public class GameController : MonoBehaviour
     NetworkManager.instance.CommandSpawn(pos, rot);
   }
 
-  public void RequestTowerDamage(int damage = 1)
+  public void RequestDebugSpawnUnit()
   {
-    throw new System.NotImplementedException();
+    var pos = new Vector3(0, 0, 4);
+    var rot = Quaternion.Euler(0, 180,0);
+    NetworkManager.instance.CommandDebugSpawn(pos, rot);
+   }
+
+  public void RequestTowerDamage(string unitType)
+  {
+        NetworkManager.instance.CommandTakeTowerDamage(unitType);
   }
 
   #endregion
