@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Unit
   - Tower
+  - Player1
+  - Player2
+  - Ground
   layers:
   - Default
   - TransparentFX
