@@ -96,9 +96,15 @@ public class NetworkManager : MonoBehaviour
     this.socket.Emit("spawn", new JSONObject(data));
   }
 
-  public void CommandTakeTowerDamage(int damage = 1)
+  public void CommandDebugSpawn(Vector3 pos, Quaternion rot)
+   {
+        string data = JsonUtility.ToJson(new PointJSON(pos, rot));
+        this.socket.Emit("spawn debug", new JSONObject(data));
+   }
+
+  public void CommandTakeTowerDamage(string unitType)
   {
-    throw new System.NotImplementedException();
+        this.socket.Emit("damage castle", JSONObject.CreateStringObject(unitType));
   }
 
   #endregion
