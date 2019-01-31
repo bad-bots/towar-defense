@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour
 
   #region Socket Events
   public event Action<Vector3, Quaternion> SpawnKnightEvent;
-  public event Action StartGameEvent;
+  public event Action<PlayerJSON> StartGameEvent;
   public event Action IncorrectRoomCodeEvent;
   #endregion
 
@@ -48,34 +48,6 @@ public class NetworkManager : MonoBehaviour
 
   #endregion /* MONOBEHAVIOUR_METHODS */
 
-  #region SOCKET_METHODS
-
-  [Obsolete("Direct emitting is deprecated, please use command methods instead")]
-  public void SendEvent(string evt)
-  {
-    socket.Emit(evt);
-  }
-
-  [Obsolete("Direct emitting is deprecated, please use command methods instead")]
-  public void SendEvent(string evt, JSONObject data)
-  {
-    socket.Emit(evt, data);
-  }
-
-  [Obsolete("Direct emitting is deprecated, please use command methods instead")]
-  public void SendEvent(string evt, Action<JSONObject> action)
-  {
-    socket.Emit(evt, action);
-  }
-
-  [Obsolete("Direct emitting is deprecated, please use command methods instead")]
-  public void SendEvent(string evt, JSONObject data, Action<JSONObject> action)
-  {
-    socket.Emit(evt, data, action);
-  }
-
-  #endregion /* SOCKET_METHODS */
-
   #region Event Handlers
 
   private void HandleSpawnKnight(SocketIOEvent obj)
@@ -90,7 +62,8 @@ public class NetworkManager : MonoBehaviour
 
   private void HandleStartGame(SocketIOEvent obj)
   {
-    StartGameEvent();
+    var playerData = PlayerJSON.CreateFromJSON(obj.data.ToString());
+    StartGameEvent(playerData);
   }
 
   private void HandleIncorrectRoomCode(SocketIOEvent obj)
@@ -124,6 +97,11 @@ public class NetworkManager : MonoBehaviour
     this.socket.Emit("spawn", new JSONObject(data));
   }
 
+  public void CommandTakeTowerDamage(int damage = 1)
+  {
+    throw new System.NotImplementedException();
+  }
+
   #endregion
 
   #region Command Acknowledgments
@@ -137,17 +115,6 @@ public class NetworkManager : MonoBehaviour
   #endregion
 
   #region JSON Message Classes
-
-  //[Serializable]
-  //public class PlayerJSON
-  //{
-  //    public string name;
-
-  //    public PlayerJSON(string _name)
-  //    {
-  //        name = _name;
-  //    }
-  //}
 
   [Serializable]
   public class PointJSON
@@ -172,31 +139,29 @@ public class NetworkManager : MonoBehaviour
     }
   }
 
-  //[Serializable]
-  //public class PositionJSON
-  //{
-  //    public float[] position;
-  //    public PositionJSON(Vector3 _position)
-  //    {
-  //        position = new float[] { _position.x, _position.y, _position.z };
-  //    }
-  //}
-
-  //[Serializable]
-  //public class RotationJSON
-  //{
-  //    public float[] rotation;
-  //    public RotationJSON(Quaternion _rotation)
-  //    {
-  //        rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
-  //    }
-  //}
-
   [Serializable]
   public class UnitJSON
   {
     public float[] position;
     public float[] rotation;
+    public string unitType;
+
+    public UnitJSON(Vector3 _position, Quaternion _rotation, string _unitType)
+    {
+      position = new float[] {
+                _position.x,
+                _position.y,
+                _position.z
+            };
+
+      rotation = new float[] {
+                _rotation.eulerAngles.x,
+                _rotation.eulerAngles.y,
+                _rotation.eulerAngles.z
+            };
+
+      unitType = _unitType;
+    }
 
     public static UnitJSON CreateFromJSON(string data)
     {
@@ -205,22 +170,9 @@ public class NetworkManager : MonoBehaviour
   }
 
   [Serializable]
-  public class GameStateJSON
-  {
-    public string joinToken;
-    public string roomName;
-    public PlayerJSON player1;
-    public PlayerJSON player2;
-
-    public static GameStateJSON CreateFromJSON(string data)
-    {
-      return JsonUtility.FromJson<GameStateJSON>(data);
-    }
-  }
-
-  [Serializable]
   public class PlayerJSON
   {
+    public int playerNo;
     public int castleHealth;
     public int doubloons;
     public CoolDownsJSON coolDowns;
@@ -231,13 +183,31 @@ public class NetworkManager : MonoBehaviour
     }
   }
 
+  [Serializable]
   public class CoolDownsJSON
   {
-    public int unitType;
+    public int knight;
 
     public static CoolDownsJSON CreateFromJSON(string data)
     {
       return JsonUtility.FromJson<CoolDownsJSON>(data);
+    }
+  }
+
+  [Serializable]
+  public class TowerDamageJSON
+  {
+    public int damage;
+    public string playerName;
+
+    public TowerDamageJSON(int _damage = 1)
+    {
+      damage = _damage;
+    }
+
+    public static TowerDamageJSON CreateFromJSON(string data)
+    {
+      return JsonUtility.FromJson<TowerDamageJSON>(data);
     }
   }
   #endregion
