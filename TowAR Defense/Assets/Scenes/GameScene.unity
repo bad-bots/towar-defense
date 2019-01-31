@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 40628487}
   m_Layer: 0
   m_Name: Content
-  m_TagString: Untagged
+  m_TagString: Game Board
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1133,6 +1133,7 @@ GameObject:
   - component: {fileID: 1400627858}
   - component: {fileID: 1400627857}
   - component: {fileID: 1400627856}
+  - component: {fileID: 1400627860}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1221,6 +1222,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1400627860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400627855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8cd72eab3342b448bd354a754ca90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1647147535
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,7 +1467,6 @@ GameObject:
   - component: {fileID: 1835167893}
   - component: {fileID: 1835167892}
   - component: {fileID: 1835167891}
-  - component: {fileID: 1835167890}
   m_Layer: 5
   m_Name: SpawnKnightButton
   m_TagString: Untagged
@@ -1482,23 +1494,6 @@ RectTransform:
   m_AnchoredPosition: {x: -200, y: 90}
   m_SizeDelta: {x: 320, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1835167890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1835167888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eea82ed138678a4496a1387f769fc64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  knightPrefab: {fileID: 1969145986120274, guid: f95d1a9483a8c6a4496c281ffd93702c,
-    type: 3}
-  gameBoard: {fileID: 40628487}
-  tower1: {fileID: 241711061}
-  tower2: {fileID: 40696776}
 --- !u!114 &1835167891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1539,8 +1534,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1835167890}
-        m_MethodName: HandleClick
+      - m_Target: {fileID: 1400627860}
+        m_MethodName: SpawnKnight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
