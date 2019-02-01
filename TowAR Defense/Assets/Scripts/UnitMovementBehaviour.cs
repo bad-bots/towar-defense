@@ -20,7 +20,18 @@ public class UnitMovementBehaviour : MonoBehaviour
     {
         if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
         {
-            NetworkManager.instance.CommandTakeTowerDamage(gameObject.name);
+            int attackedPlayer = collision.gameObject.name == "Tower1" ? 1 : 2;
+
+            // Only have attacking player send the request to attack enemy castle.
+            if (GameController.instance.isPlayer1 && attackedPlayer == 2)
+            {
+                NetworkManager.instance.CommandTakeTowerDamage(gameObject.name, attackedPlayer);
+            }
+            else if (!GameController.instance.isPlayer1 && attackedPlayer ==1)
+            {
+                NetworkManager.instance.CommandTakeTowerDamage(gameObject.name, attackedPlayer);
+            }
+
             Destroy(gameObject);
         }
     }

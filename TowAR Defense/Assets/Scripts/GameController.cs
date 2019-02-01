@@ -64,6 +64,7 @@ public class GameController : MonoBehaviour
 
         // Register network handlers
         NetworkManager.instance.SpawnKnightEvent += OnUnitSpawn;
+        NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
     }
 
     #endregion
@@ -95,10 +96,10 @@ public class GameController : MonoBehaviour
         NetworkManager.instance.CommandDebugSpawn(pos, rot);
     }
 
-    public void RequestTowerDamage(string unitType)
+    public void RequestTowerDamage(string unitType, int attackedPlayer)
     {
         CheckInitialized();
-        NetworkManager.instance.CommandTakeTowerDamage(unitType);
+        NetworkManager.instance.CommandTakeTowerDamage(unitType, attackedPlayer);
     }
 
     #endregion
@@ -126,6 +127,25 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void updateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
+    {
+        if (attackedPlayerHealth.playerNo == 1 && isPlayer1)
+        {
+            castleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else if (attackedPlayerHealth.playerNo == 1 && !isPlayer1)
+        {
+            enemyCastleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else if (attackedPlayerHealth.playerNo == 2 && isPlayer1)
+        {
+            enemyCastleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else
+        {
+            castleHealth = attackedPlayerHealth.castleHealth;
+        }
+    }
     #endregion
 
     #region Private Methods
