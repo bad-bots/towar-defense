@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8719161168266869942}
   - component: {fileID: 3953003761406853727}
   - component: {fileID: 6808192826249511096}
+  - component: {fileID: 7123195827557003246}
+  - component: {fileID: 5371901635332089396}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -62,3 +64,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d59788bc3e18cb04d877ce146d8cf63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7123195827557003246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032194201936214262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64e8a63ea35b9e40bbc115cc28da0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameScene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
+--- !u!114 &5371901635332089396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032194201936214262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f24e56e7f6fdc4cbe0c73136676370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
+    m_SceneName: GameScene
