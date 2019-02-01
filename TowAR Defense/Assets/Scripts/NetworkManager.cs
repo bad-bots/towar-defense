@@ -182,6 +182,7 @@ public class NetworkManager : MonoBehaviour
   {
     public int playerNo;
     public int castleHealth;
+    public int enemyCastleHealth;
     public int doubloons;
     public CoolDownsJSON coolDowns;
 

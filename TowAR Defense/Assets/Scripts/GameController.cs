@@ -5,15 +5,17 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
   #region Public Members
-  // [HideInInspector]
+  [HideInInspector]
   public float doubloons;
-  // [HideInInspector]
+  [HideInInspector]
   public bool isPlayer1;
   // [HideInInspector]
   public int castleHealth;
+  public int enemyCastleHealth;
   #endregion
 
   #region Private Members
+  private bool initalized = false;
   private SpawnKnight spawnKnight;
   #endregion
 
@@ -47,8 +49,18 @@ public class GameController : MonoBehaviour
 
   #region Public Methods
 
+  public void Initialize(NetworkManager.PlayerJSON playerData)
+  {
+    doubloons = playerData.doubloons;
+    isPlayer1 = playerData.playerNo == 1;
+    castleHealth = playerData.castleHealth;
+    enemyCastleHealth = playerData.enemyCastleHealth;
+    initalized = true;
+  }
+
   public void RequestSpawnUnit()
   {
+    CheckInitialized();
     var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
     var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
     NetworkManager.instance.CommandSpawn(pos, rot);
@@ -56,14 +68,16 @@ public class GameController : MonoBehaviour
 
   public void RequestDebugSpawnUnit()
   {
-    var pos = new Vector3(0, 0, 4);
-    var rot = Quaternion.Euler(0, 180,0);
+    CheckInitialized();
+    var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
+    var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
     NetworkManager.instance.CommandDebugSpawn(pos, rot);
-   }
+  }
 
   public void RequestTowerDamage(string unitType)
   {
-        NetworkManager.instance.CommandTakeTowerDamage(unitType);
+    CheckInitialized();
+    NetworkManager.instance.CommandTakeTowerDamage(unitType);
   }
 
   #endregion
@@ -78,5 +92,11 @@ public class GameController : MonoBehaviour
 
   #endregion
 
-
+  #region Private Methods
+  private void CheckInitialized()
+  {
+    if (!initalized)
+      throw new System.InvalidOperationException("Attempted to use GameController before initializing");
+  }
+  #endregion
 }
