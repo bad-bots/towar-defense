@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     // [HideInInspector]
     public int castleHealth;
     public int enemyCastleHealth;
+
     #endregion
 
     #region Private Members

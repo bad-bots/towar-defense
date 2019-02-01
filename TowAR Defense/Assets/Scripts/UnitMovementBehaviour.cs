@@ -6,10 +6,11 @@ public class UnitMovementBehaviour : MonoBehaviour
 {
     public Transform target;
     public float speed = 1;
+    public float distanceThreshold = 0.1f;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower")) 
+        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
         {
             NetworkManager.instance.CommandTakeTowerDamage(gameObject.name);
             Destroy(gameObject);
@@ -20,6 +21,7 @@ public class UnitMovementBehaviour : MonoBehaviour
     void Update()
     {
         transform.LookAt(target);
-        transform.position += transform.forward * speed * Time.deltaTime;
+        if ((transform.position - target.position).sqrMagnitude > distanceThreshold)
+            transform.position += transform.forward * speed * Time.deltaTime;
     }
 }
