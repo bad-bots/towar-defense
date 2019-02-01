@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-  public void SpawnKnight()
-  {
-    GameController.instance.RequestSpawnUnit();
-  }
+    public void SpawnKnight()
+    {
+        GameController.instance.RequestSpawnUnit();
+    }
 
     public void DebugSpawnNight()
     {
