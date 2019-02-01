@@ -5,28 +5,28 @@ using UnityEngine.UI;
 
 public class JoinRoomPageController : MonoBehaviour
 {
-  public InputField roomCodeInput;
-  public Text wrongCodeText;
+    public InputField roomCodeInput;
+    public Text wrongCodeText;
 
-  void Start()
-  {
-    NetworkManager.instance.IncorrectRoomCodeEvent += OnIncorrectGameCode;
-  }
+    void Start()
+    {
+        NetworkManager.instance.IncorrectRoomCodeEvent += OnIncorrectGameCode;
+    }
 
-  public void HandleClick()
-  {
-    string roomCode = roomCodeInput.text;
-    NetworkManager.instance.CommandJoinRoom(roomCode);
-  }
+    public void HandleClick()
+    {
+        string roomCode = roomCodeInput.text;
+        NetworkManager.instance.CommandJoinRoom(roomCode);
+    }
 
-public void HandleDebugRoomCLick()
+    public void HandleDebugRoomCLick()
     {
         string roomCode = "debug";
         NetworkManager.instance.CommandJoinRoom(roomCode);
     }
 
-  private void OnIncorrectGameCode()
-  {
-    wrongCodeText.gameObject.SetActive(true);
-  }
+    private void OnIncorrectGameCode()
+    {
+        wrongCodeText.gameObject.SetActive(true);
+    }
 }

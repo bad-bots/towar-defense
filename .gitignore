@@ -31,6 +31,9 @@ ExportedObj/
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
+# Vuforia
+somedata16
+
 # Builds
 *.apk
 *.unitypackage
