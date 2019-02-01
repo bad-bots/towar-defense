@@ -5,18 +5,25 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     #region Public Members
-    [HideInInspector]
+    public bool isPlayer1
+    {
+        get
+        {
+            return m_isPlayer1;
+        }
+    }
+
     public float doubloons;
-    [HideInInspector]
-    public bool isPlayer1;
     // [HideInInspector]
     public int castleHealth;
     public int enemyCastleHealth;
     #endregion
 
     #region Private Members
-    private bool initalized = false;
     private SpawnKnight spawnKnight;
+
+    private bool m_initalized = false;
+    private bool m_isPlayer1;
     #endregion
 
     public static GameController instance = null;
@@ -55,10 +62,10 @@ public class GameController : MonoBehaviour
     public void Initialize(NetworkManager.PlayerJSON playerData)
     {
         doubloons = playerData.doubloons;
-        isPlayer1 = playerData.playerNo == 1;
+        m_isPlayer1 = playerData.playerNo == 1;
         castleHealth = playerData.castleHealth;
         enemyCastleHealth = playerData.enemyCastleHealth;
-        initalized = true;
+        m_initalized = true;
     }
 
     public void RequestSpawnUnit()
@@ -97,7 +104,7 @@ public class GameController : MonoBehaviour
     #region Private Methods
     private void CheckInitialized()
     {
-        if (!initalized)
+        if (!m_initalized)
             throw new System.InvalidOperationException("Attempted to use GameController before initializing");
     }
     #endregion
