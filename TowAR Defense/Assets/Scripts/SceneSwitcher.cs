@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
-  public SceneField scene;
+    public SceneField scene;
 
-  public void SwitchScene()
-  {
-    SceneManager.LoadScene(scene);
-  }
+    public void SwitchScene()
+    {
+        SceneManager.LoadScene(scene);
+    }
 }

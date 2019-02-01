@@ -4,94 +4,94 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-  #region Public Members
-  [HideInInspector]
-  public float doubloons;
-  [HideInInspector]
-  public bool isPlayer1;
-  #endregion
+    #region Public Members
+    [HideInInspector]
+    public float doubloons;
+    [HideInInspector]
+    public bool isPlayer1;
+    #endregion
 
-  #region Private Members
-  private bool initalized = false;
-  private SpawnKnight spawnKnight;
-  #endregion
+    #region Private Members
+    private bool initalized = false;
+    private SpawnKnight spawnKnight;
+    #endregion
 
-  public static GameController instance = null;
-  #region MonoBehaviour Methods
+    public static GameController instance = null;
+    #region MonoBehaviour Methods
 
-  void Awake()
-  {
-    if (instance == null)
+    void Awake()
     {
-      instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
-    else if (instance != this)
+
+    void Start()
     {
-      Destroy(gameObject);
+        // Grab component references
+        spawnKnight = GetComponent<SpawnKnight>();
+
+        // Register network handlers
+        NetworkManager.instance.SpawnKnightEvent += OnUnitSpawn;
     }
 
-    DontDestroyOnLoad(gameObject);
-  }
+    #endregion
 
-  void Start()
-  {
-    // Grab component references
-    spawnKnight = GetComponent<SpawnKnight>();
+    #region Public Methods
 
-    // Register network handlers
-    NetworkManager.instance.SpawnKnightEvent += OnUnitSpawn;
-  }
+    public void Initialize(NetworkManager.PlayerJSON playerData)
+    {
+        doubloons = playerData.doubloons;
+        isPlayer1 = playerData.playerNo == 1;
+        initalized = true;
+    }
 
-  #endregion
+    public void RequestSpawnUnit()
+    {
+        CheckInitialized();
+        var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
+        var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
+        NetworkManager.instance.CommandSpawn(pos, rot);
+    }
 
-  #region Public Methods
+    public void RequestDebugSpawnUnit()
+    {
+        CheckInitialized();
+        var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
+        var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
+        NetworkManager.instance.CommandDebugSpawn(pos, rot);
+    }
 
-  public void Initialize(NetworkManager.PlayerJSON playerData)
-  {
-    doubloons = playerData.doubloons;
-    isPlayer1 = playerData.playerNo == 1;
-    initalized = true;
-  }
+    public void RequestTowerDamage(string unitType)
+    {
+        CheckInitialized();
+        NetworkManager.instance.CommandTakeTowerDamage(unitType);
+    }
 
-  public void RequestSpawnUnit()
-  {
-    CheckInitialized();
-    var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
-    var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
-    NetworkManager.instance.CommandSpawn(pos, rot);
-  }
+    #endregion
 
-  public void RequestDebugSpawnUnit()
-  {
-    CheckInitialized();
-    var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
-    var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
-    NetworkManager.instance.CommandDebugSpawn(pos, rot);
-  }
+    #region Event Handlers
 
-  public void RequestTowerDamage(string unitType)
-  {
-    CheckInitialized();
-    NetworkManager.instance.CommandTakeTowerDamage(unitType);
-  }
+    private void OnUnitSpawn(Vector3 position, Quaternion rotation, bool _isPlayer1)
+    {
+        Debug.Log("Spawning");
+        spawnKnight.Spawn(position, rotation, _isPlayer1);
+    }
 
-  #endregion
+    #endregion
 
-  #region Event Handlers
-
-  private void OnUnitSpawn(Vector3 position, Quaternion rotation, bool _isPlayer1)
-  {
-    Debug.Log("Spawning");
-    spawnKnight.Spawn(position, rotation, _isPlayer1);
-  }
-
-  #endregion
-
-  #region Private Methods
-  private void CheckInitialized()
-  {
-    if (!initalized)
-      throw new System.InvalidOperationException("Attempted to use GameController before initializing");
-  }
-  #endregion
+    #region Private Methods
+    private void CheckInitialized()
+    {
+        if (!initalized)
+            throw new System.InvalidOperationException("Attempted to use GameController before initializing");
+    }
+    #endregion
 }

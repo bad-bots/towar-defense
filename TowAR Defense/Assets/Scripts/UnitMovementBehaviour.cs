@@ -7,7 +7,7 @@ public class UnitMovementBehaviour : MonoBehaviour
     public Transform target;
     public float speed = 1;
     private Rigidbody rb;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +16,7 @@ public class UnitMovementBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower")) 
+        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
         {
             Destroy(gameObject);
         }
