@@ -111,9 +111,10 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("spawn debug", new JSONObject(data));
     }
 
-    public void CommandTakeTowerDamage(string unitType)
+    public void CommandTakeTowerDamage(string unitType, int attackedPlayer)
     {
-        this.socket.Emit("damage castle", JSONObject.CreateStringObject(unitType));
+        string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayer));
+        this.socket.Emit("damage castle", new JSONObject(data));
     }
 
     #endregion
@@ -153,6 +154,37 @@ public class NetworkManager : MonoBehaviour
             };
         }
     }
+
+    [Serializable]
+    public class TowerDamageJSON
+    {
+        public string unitType;
+        public int attackedPlayer;
+
+        public TowerDamageJSON(string _unitType, int _attackedPlayer)
+        {
+            unitType = _unitType;
+            attackedPlayer = _attackedPlayer;
+        }
+
+        public static TowerDamageJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<TowerDamageJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class AttackedPlayerHealth
+    {
+        public int playerNo;
+        public int castleHealth;
+
+        public static AttackedPlayerHealth CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<AttackedPlayerHealth>(data);
+        }
+    }
+
 
     [Serializable]
     public class UnitJSON
@@ -211,34 +243,6 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    [Serializable]
-    public class  AttackedPlayerHealth
-    {
-        public int playerNo;
-        public int castleHealth;
-
-        public static AttackedPlayerHealth CreateFromJSON(string data)
-        {
-            return JsonUtility.FromJson<AttackedPlayerHealth>(data);
-        }
-    }
-
-    [Serializable]
-    public class TowerDamageJSON
-    {
-        public int damage;
-        public string playerName;
-
-        public TowerDamageJSON(int _damage = 1)
-        {
-            damage = _damage;
-        }
-
-        public static TowerDamageJSON CreateFromJSON(string data)
-        {
-            return JsonUtility.FromJson<TowerDamageJSON>(data);
-        }
-    }
     #endregion
 
 }
