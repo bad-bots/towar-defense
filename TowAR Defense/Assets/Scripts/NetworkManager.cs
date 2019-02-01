@@ -177,8 +177,16 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    [Serializable]
-    public class PlayerJSON
+  [Serializable]
+  public class PlayerJSON
+  {
+    public int playerNo;
+    public int castleHealth;
+    public int enemyCastleHealth;
+    public int doubloons;
+    public CoolDownsJSON coolDowns;
+
+    public static PlayerJSON CreateFromJSON(string data)
     {
         public int playerNo;
         public int castleHealth;

@@ -9,8 +9,9 @@ public class UnitMovementBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
+        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower")) 
         {
+            NetworkManager.instance.CommandTakeTowerDamage(gameObject.name);
             Destroy(gameObject);
         }
     }
