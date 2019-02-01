@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(UnitType))]
 public class UnitMovementBehaviour : MonoBehaviour
 {
     public Transform target;
-    public float speed = 1;
-    public float distanceThreshold = 0.1f;
+
+    private float distanceThreshold;
+    private UnitType unitType;
+
+    void Start()
+    {
+        unitType = GetComponent<UnitData>().type;
+        Debug.Log(unitType);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -22,6 +30,6 @@ public class UnitMovementBehaviour : MonoBehaviour
     {
         transform.LookAt(target);
         if ((transform.position - target.position).sqrMagnitude > distanceThreshold)
-            transform.position += transform.forward * speed * Time.deltaTime;
+            transform.position += transform.forward * unitType.speed * Time.deltaTime;
     }
 }

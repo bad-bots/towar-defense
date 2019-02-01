@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5408242020230002342}
   - component: {fileID: 3287805248805938407}
-  - component: {fileID: 4062735140159056766}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -45,19 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doubloons: 0
-  isPlayer1: 0
---- !u!114 &4062735140159056766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2383218125033968349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eea82ed138678a4496a1387f769fc64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  knightPrefab: {fileID: 1969145986120274, guid: f95d1a9483a8c6a4496c281ffd93702c,
-    type: 3}
-  gameBoard: {fileID: 0}
+  castleHealth: 0
+  enemyCastleHealth: 0

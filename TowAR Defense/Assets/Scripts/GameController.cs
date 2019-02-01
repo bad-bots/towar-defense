@@ -17,14 +17,18 @@ public class GameController : MonoBehaviour
     // [HideInInspector]
     public int castleHealth;
     public int enemyCastleHealth;
-
     #endregion
 
     #region Private Members
-    private SpawnKnight spawnKnight;
-
+    // Game state
     private bool m_initalized = false;
     private bool m_isPlayer1;
+
+    // internal data
+    private Dictionary<string, UnitType> m_unitTypes = new Dictionary<string, UnitType>();
+    private List<UnitData> m_allies = new List<UnitData>();
+    private List<UnitData> m_enemies = new List<UnitData>();
+    private Transform gameBoard;
     #endregion
 
     public static GameController instance = null;
@@ -42,15 +46,21 @@ public class GameController : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-
-            DontDestroyOnLoad(gameObject);
         }
     }
 
     void Start()
     {
-        // Grab component references
-        spawnKnight = GetComponent<SpawnKnight>();
+        // Find all Unit Types
+        var unitTypes = new List<UnitType>(Resources.LoadAll<UnitType>(""));
+        foreach (var type in unitTypes)
+        {
+            Debug.Log("Found Unit Type: " + type.name);
+            m_unitTypes.Add(type.name, type);
+        }
+        Debug.Log("Found " + unitTypes.Count + " unit types");
+
+        gameBoard = GameObject.FindGameObjectWithTag("Game Board").transform;
 
         // Register network handlers
         NetworkManager.instance.SpawnKnightEvent += OnUnitSpawn;
@@ -97,9 +107,25 @@ public class GameController : MonoBehaviour
 
     private void OnUnitSpawn(Vector3 position, Quaternion rotation, bool _isPlayer1)
     {
+        CheckInitialized();
         Debug.Log("Spawning");
-        spawnKnight.Spawn(position, rotation, _isPlayer1);
+        UnitType unitType = null;
+        if (m_unitTypes.TryGetValue("Knight", out unitType))
+        {
+            var spawnedUnit = Instantiate(unitType.unitPrefab, gameBoard) as GameObject;
+            spawnedUnit.transform.localPosition = position;
+            spawnedUnit.transform.localRotation = rotation;
+            spawnedUnit.tag = _isPlayer1 ? "Player1" : "Player2";
+            var unitData = spawnedUnit.GetComponent<UnitData>();
+            unitData.type = unitType;
+            unitData.playerNo = _isPlayer1 ? 1 : 2;
+        }
+        else
+        {
+            Debug.LogWarning("Unit Type has no prefab attached");
+        }
     }
+
     #endregion
 
     #region Private Methods

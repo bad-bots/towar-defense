@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(UnitMovementBehaviour))]
+[RequireComponent(typeof(UnitData))]
 public class UnitTargetingBehaviour : MonoBehaviour
 {
     #region Private Members
     private UnitMovementBehaviour movementBehaviour;
+    private UnitData unitData;
     #endregion
 
     #region MonoBehaviour Methods
     void Awake()
     {
         movementBehaviour = GetComponent<UnitMovementBehaviour>();
+        unitData = GetComponent<UnitData>();
     }
 
     void Start()
@@ -31,7 +34,8 @@ public class UnitTargetingBehaviour : MonoBehaviour
         }
         movementBehaviour.target = target;
         var targetMovement = target.GetComponent<UnitMovementBehaviour>();
-        SetTargetIfOnTower(targetMovement, this.transform);
+        if (targetMovement)
+            SetTargetIfOnTower(targetMovement, this.transform);
 
         string alliesTag = GameController.instance.isPlayer1 ? "Player1" : "Player2";
         var allies = GameObject.FindGameObjectsWithTag(alliesTag);
@@ -56,7 +60,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     private Transform FindNewTarget()
     {
-        string enemyTag = GameController.instance.isPlayer1 ? "Player2" : "Player1";
+        string enemyTag = "Player" + (3 - unitData.playerNo);
         var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform target = FindNearestEnemy(enemies);
         if (target == null)

@@ -105,7 +105,7 @@ public class NetworkManager : MonoBehaviour
 
     public void CommandTakeTowerDamage(string unitType)
     {
-        this.socket.Emit("damage castle", JSONObject.CreateStringObject(unitType));
+        // this.socket.Emit("damage castle", JSONObject.CreateStringObject(unitType));
     }
 
     #endregion
