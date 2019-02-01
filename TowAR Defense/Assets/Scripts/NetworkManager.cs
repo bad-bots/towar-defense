@@ -19,6 +19,7 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Socket Events
+    public event Action<AttackedPlayerHealth> UpdateCastleHealth;
     public event Action<Vector3, Quaternion, bool> SpawnKnightEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action IncorrectRoomCodeEvent;
@@ -44,6 +45,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("spawn", HandleSpawnKnight);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
+        socket.On("damage castle", HandleDamageCastle);
     }
 
     #endregion /* MONOBEHAVIOUR_METHODS */
@@ -69,6 +71,12 @@ public class NetworkManager : MonoBehaviour
     private void HandleIncorrectRoomCode(SocketIOEvent obj)
     {
         IncorrectRoomCodeEvent();
+    }
+
+    private void HandleDamageCastle(SocketIOEvent obj)
+    {
+        var attackedPlayer = AttackedPlayerHealth.CreateFromJSON(obj.data.ToString());
+        UpdateCastleHealth(attackedPlayer);
     }
 
     #endregion
@@ -200,6 +208,18 @@ public class NetworkManager : MonoBehaviour
         public static CoolDownsJSON CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<CoolDownsJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class  AttackedPlayerHealth
+    {
+        public int playerNo;
+        public int castleHealth;
+
+        public static AttackedPlayerHealth CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<AttackedPlayerHealth>(data);
         }
     }
 

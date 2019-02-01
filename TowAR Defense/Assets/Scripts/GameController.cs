@@ -41,6 +41,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
         // Grab component references
         spawnKnight = GetComponent<SpawnKnight>();
 
@@ -91,6 +92,26 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("Spawning");
         spawnKnight.Spawn(position, rotation, _isPlayer1);
+    }
+
+    void updateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
+    {
+        if (attackedPlayerHealth.playerNo == 1 && isPlayer1)
+        {
+            castleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else if (attackedPlayerHealth.playerNo == 1 && !isPlayer1)
+        {
+            enemyCastleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else if (attackedPlayerHealth.playerNo == 2 && isPlayer1)
+        {
+            enemyCastleHealth = attackedPlayerHealth.castleHealth;
+        }
+        else
+        {
+            castleHealth = attackedPlayerHealth.castleHealth;
+        }
     }
     #endregion
 

@@ -48,4 +48,5 @@ public class CastleHealthController : MonoBehaviour
         enemyTower.gameObject.GetComponentInChildren<TextMesh>().text =
             GameController.instance.enemyCastleHealth.ToString();
     }
+
 }
