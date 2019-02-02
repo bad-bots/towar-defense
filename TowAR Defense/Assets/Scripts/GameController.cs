@@ -78,10 +78,10 @@ public class GameController : MonoBehaviour
         NetworkManager.instance.CommandDebugSpawn(pos, rot);
     }
 
-    public void RequestTowerDamage(string unitType)
+    public void RequestTowerDamage(string unitType, int attackedPlayer)
     {
         CheckInitialized();
-        NetworkManager.instance.CommandTakeTowerDamage(unitType);
+        NetworkManager.instance.CommandTakeTowerDamage(unitType, attackedPlayer);
     }
 
     #endregion
