@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         gameBoard = GameObject.FindGameObjectWithTag("Game Board").transform;
 
         // Register network handlers
-        NetworkManager.instance.SpawnKnightEvent += OnUnitSpawn;
+        NetworkManager.instance.SpawnUnitEvent += OnUnitSpawn;
         NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
     }
 
@@ -80,12 +80,10 @@ public class GameController : MonoBehaviour
         m_initalized = true;
     }
 
-    public void RequestSpawnUnit()
+    public void RequestSpawnUnit(string unitType)
     {
         CheckInitialized();
-        var pos = new Vector3(0, 0, isPlayer1 ? 4 : -4);
-        var rot = Quaternion.Euler(0, isPlayer1 ? 180 : 0, 0);
-        NetworkManager.instance.CommandSpawn(pos, rot);
+        NetworkManager.instance.CommandSpawn(unitType);
     }
 
     public void RequestDebugSpawnUnit()
@@ -106,12 +104,12 @@ public class GameController : MonoBehaviour
 
     #region Event Handlers
 
-    private void OnUnitSpawn(Vector3 position, Quaternion rotation, bool _isPlayer1)
+    private void OnUnitSpawn(string unitTypeName, Vector3 position, Quaternion rotation, bool _isPlayer1)
     {
         CheckInitialized();
         Debug.Log("Spawning");
         UnitType unitType = null;
-        if (m_unitTypes.TryGetValue("Knight", out unitType))
+        if (m_unitTypes.TryGetValue(unitTypeName, out unitType))
         {
             var spawnedUnit = Instantiate(unitType.unitPrefab, gameBoard) as GameObject;
             spawnedUnit.transform.localPosition = position;
