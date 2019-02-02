@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour
 
     #region Socket Events
     public event Action<AttackedPlayerHealth> UpdateCastleHealth;
-    public event Action<Vector3, Quaternion, bool> SpawnKnightEvent;
+    public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action IncorrectRoomCodeEvent;
     #endregion
@@ -42,7 +42,7 @@ public class NetworkManager : MonoBehaviour
     {
         this.socket = this.GetComponent<SocketIOComponent>();
 
-        socket.On("spawn", HandleSpawnKnight);
+        socket.On("spawn", HandleSpawnUnit);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damage castle", HandleDamageCastle);
@@ -52,14 +52,17 @@ public class NetworkManager : MonoBehaviour
 
     #region Event Handlers
 
-    private void HandleSpawnKnight(SocketIOEvent obj)
+    private void HandleSpawnUnit(SocketIOEvent obj)
     {
         string data = obj.data.ToString();
         var json = UnitJSON.CreateFromJSON(data);
         var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
         var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
         var isPlayer1 = json.playerNo == 1;
-        SpawnKnightEvent(pos, rot, isPlayer1);
+        var unitType = json.unitType != null ?
+             json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
+             "Knight";
+        SpawnUnitEvent(unitType, pos, rot, isPlayer1);
     }
 
     private void HandleStartGame(SocketIOEvent obj)
@@ -94,15 +97,9 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("start", JSONObject.CreateStringObject(roomCode));
     }
 
-    public void CommandSpawn(Vector3 pos)
+    public void CommandSpawn(string unitType)
     {
-        CommandSpawn(pos, Quaternion.identity);
-    }
-
-    public void CommandSpawn(Vector3 pos, Quaternion rot)
-    {
-        string data = JsonUtility.ToJson(new PointJSON(pos, rot));
-        this.socket.Emit("spawn", new JSONObject(data));
+        this.socket.Emit("spawn new", JSONObject.CreateStringObject(unitType.ToLower()));
     }
 
     public void CommandDebugSpawn(Vector3 pos, Quaternion rot)
