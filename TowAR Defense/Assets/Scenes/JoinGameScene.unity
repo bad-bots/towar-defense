@@ -2285,7 +2285,7 @@ PrefabInstance:
     - target: {fileID: 3953003761406853727, guid: 8a6a56c1694ccea4788970d7ccc3ec91,
         type: 3}
       propertyPath: url
-      value: ws://192.168.1.9:8080/socket.io/?EIO=4&transport=websocket
+      value: ws://127.0.0.1:8080/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5371901635332089396, guid: 8a6a56c1694ccea4788970d7ccc3ec91, type: 3}
