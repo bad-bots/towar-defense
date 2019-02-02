@@ -8,6 +8,14 @@ public class UnitData : MonoBehaviour
     public float currentHealth;
     public int playerNo = 1;
 
+    public int enemyPlayerNo
+    {
+        get
+        {
+            return 3 - playerNo;
+        }
+    }
+
     void Start()
     {
         currentHealth = type.maxHealth;

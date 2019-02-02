@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UnitType))]
+[RequireComponent(typeof(UnitData))]
 public class UnitMovementBehaviour : MonoBehaviour
 {
     public Transform target;
 
     private float distanceThreshold;
-    private UnitType unitType;
+    private UnitData unitData;
 
     void Start()
     {
-        unitType = GetComponent<UnitData>().type;
-        Debug.Log(unitType);
+        unitData = GetComponent<UnitData>();
+        distanceThreshold = Mathf.Pow(unitData.type.attackRange, 2);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        string towerName = "Tower" + (unitData.enemyPlayerNo);
+        Debug.Log("Enemy Tower: " + towerName);
         if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
         {
             int attackedPlayer = collision.gameObject.name == "Tower1" ? 1 : 2;
@@ -27,7 +29,7 @@ public class UnitMovementBehaviour : MonoBehaviour
             {
                 NetworkManager.instance.CommandTakeTowerDamage(gameObject.name, attackedPlayer);
             }
-            else if (!GameController.instance.isPlayer1 && attackedPlayer ==1)
+            else if (!GameController.instance.isPlayer1 && attackedPlayer == 1)
             {
                 NetworkManager.instance.CommandTakeTowerDamage(gameObject.name, attackedPlayer);
             }
@@ -40,7 +42,7 @@ public class UnitMovementBehaviour : MonoBehaviour
     void Update()
     {
         transform.LookAt(target);
-        if ((transform.position - target.position).sqrMagnitude > distanceThreshold)
-            transform.position += transform.forward * unitType.speed * Time.deltaTime;
+        if ((transform.localPosition - target.localPosition).sqrMagnitude > distanceThreshold)
+            transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
     }
 }

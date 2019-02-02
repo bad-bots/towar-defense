@@ -60,7 +60,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     private Transform FindNewTarget()
     {
-        string enemyTag = "Player" + (3 - unitData.playerNo);
+        string enemyTag = "Player" + (unitData.enemyPlayerNo);
         var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform target = FindNearestEnemy(enemies);
         if (target == null)
@@ -92,8 +92,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     private Transform FindEnemyTower()
     {
-        bool isPlayerOne = GameController.instance.isPlayer1;
-        string towerName = "Tower" + (isPlayerOne ? "2" : "1");
+        string towerName = "Tower" + (unitData.enemyPlayerNo);
         var towers = GameObject.FindGameObjectsWithTag("Tower");
         int towerIndex = (towers[0].name == towerName) ? 0 : 1;
         return towers[towerIndex].transform;
