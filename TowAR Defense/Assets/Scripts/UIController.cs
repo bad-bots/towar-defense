@@ -6,7 +6,12 @@ public class UIController : MonoBehaviour
 {
     public void SpawnKnight()
     {
-        GameController.instance.RequestSpawnUnit();
+        GameController.instance.RequestSpawnUnit("Knight");
+    }
+
+    public void SpawnUnit(string unitType)
+    {
+        GameController.instance.RequestSpawnUnit(unitType);
     }
 
     public void DebugSpawnNight()
