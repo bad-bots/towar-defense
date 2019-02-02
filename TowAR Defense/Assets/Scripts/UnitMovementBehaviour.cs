@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(UnitType))]
 public class UnitMovementBehaviour : MonoBehaviour
 {
     public Transform target;
-    public float speed = 1;
+
+    private float distanceThreshold;
+    private UnitType unitType;
+
+    void Start()
+    {
+        unitType = GetComponent<UnitData>().type;
+        Debug.Log(unitType);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower")) 
+        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
         {
             int attackedPlayer = collision.gameObject.name == "Tower1" ? 1 : 2;
 
@@ -31,6 +40,7 @@ public class UnitMovementBehaviour : MonoBehaviour
     void Update()
     {
         transform.LookAt(target);
-        transform.position += transform.forward * speed * Time.deltaTime;
+        if ((transform.position - target.position).sqrMagnitude > distanceThreshold)
+            transform.position += transform.forward * unitType.speed * Time.deltaTime;
     }
 }
