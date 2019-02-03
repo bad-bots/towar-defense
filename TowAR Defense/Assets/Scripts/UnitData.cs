@@ -20,4 +20,9 @@ public class UnitData : MonoBehaviour
     {
         currentHealth = type.maxHealth;
     }
+
+    void OnDestroy()
+    {
+        GameController.instance.unitSpawner.RemoveUnit(this);
+    }
 }
