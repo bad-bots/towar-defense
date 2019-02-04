@@ -7,6 +7,7 @@ public class UnitData : MonoBehaviour
     public UnitType type;
     public float currentHealth;
     public int playerNo = 1;
+    public int unitId;
 
     public int enemyPlayerNo
     {

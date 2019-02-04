@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -2067402452, guid: bab6fa851cf5a1a4bba3cec5f191cb8e, type: 3}
   m_Name: VuforiaConfiguration
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   vuforia:
     vuforiaLicenseKey: AZmsHkb/////AAABmRJSulMK8Eq5rab24rtM/2JxAViIiAYyzpRpOYsi4s6ZzySU7E80Kq1gUMNtGDlEBLj1D/r12/v5cQwJg6jMT9uZqbHZvlQKOgOg6fnjFCHY9ikyujCU4fQciESaJdbRZTdm21GATVVQTM97ysbpZIH8c8tUsOKBHKX5z4kikrFRCrC8nkoU4yjymW7MDI6H85jsEwfXaV1Tf5M9HI1L7f6CSsIjTbKAls/u/uWHBrlnFow8yH0fPbLoIc+n5DTlJBTtkPKFhsrDVHi2UokVUwsrQzFunWrz+UjWaxsJvk6SvdHo8wc+tNc1XW2bjAUS/qdGiDmUhjVQV7bGNPhTq38A9d0ge8KiUxVmfVuGTvzF
     ufoLicenseKey: QWFJRHNQMy8vLy8vQUFBQUtEYVk1K0pUUUVWcnRaclRydzJucUNpUTBSeXhLNzRhMEZZSi9ReXdHVUJDSkxKTFBGQ0tmTGFFRWd5Y0hZMzZqK1ZLbTB1ZUZYY0ovSTQ3R2pxVnQvVDV0MFpEVmhNYXlGL0pQUGJud01IYXRFOVA4ZWI3YkZ2SHVXUG1zcVRKd1BWWUJKZHNZL0t3dXVvcVdlYlpObFZ0SWl3UlFsZVVNWlpzZXc3Z2ZnMU9PekNNTlpiM1h5L3hNdHgyTFdhTDhBSHJ1UTZFUlBpWkhvTEVCY0lUOHpRUUs1RnpDWjRkVm9JYnNCZEhUTEZHMXc2MllzbDF3ei96K1N0alVrSzRDWjNBVlVqN2pYY3N1N2RaTTU1K0pNQVZkRUFXZ3RXbjBMdHpvNHAzRzNsMTNlejE4ZUNsRXpVVGZNSXlBS0Z4THFveG83Q28yVnFMdjRRMnQ1ekVaS0VNckRPbEhMNXI5WTF5dVdaL25DVEk=
@@ -23,20 +23,20 @@ MonoBehaviour:
     cameraDirection: 0
     mirrorVideoBackground: 0
     version: 8.0.10
-    eulaAcceptedVersions: '{"Values":["7.1","7.2","7.5","8.0","0.0","7.7","8.1"]}'
+    eulaAcceptedVersions: '{"Values":["0.0","8.0","7.5","7.1","7.2","7.7","8.1"]}'
   digitalEyewear:
     cameraOffset: 0.06
     distortionRenderingLayer: 31
     eyewearType: 0
     stereoFramework: 0
     seeThroughConfiguration: 0
-    viewerName:
-    viewerManufacturer:
+    viewerName: 
+    viewerManufacturer: 
     useCustomViewer: 0
     customViewer:
       Version: 0
-      Name:
-      Manufacturer:
+      Name: 
+      Manufacturer: 
       ButtonType: 0
       ScreenToLensDistance: 0
       InterLensDistance: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
     autoInitTracker: 0
     autoStartTracker: 0
   webcam:
-    deviceNameSetInEditor:
+    deviceNameSetInEditor: 
     flipHorizontally: 0
     turnOffWebCam: 0
     renderTextureLayer: 30
