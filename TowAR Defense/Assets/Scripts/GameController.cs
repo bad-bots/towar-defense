@@ -104,7 +104,9 @@ public class GameController : MonoBehaviour
 
     private void OnUnitSpawn(string unitTypeName, Vector3 pos, Quaternion rot, bool _isPlayer1)
     {
+        Debug.Log("Spawning unit from controller");
         CheckInitialized();
+        Debug.Log("passed init");
         unitSpawner.SpawnUnit(unitTypeName, pos, rot, _isPlayer1);
     }
 
@@ -133,7 +135,10 @@ public class GameController : MonoBehaviour
     private void CheckInitialized()
     {
         if (!m_initalized)
+        {
+            Debug.LogError("Failed to initialized game controller");
             throw new System.InvalidOperationException("Attempted to use GameController before initializing");
+        }
     }
     #endregion
 }

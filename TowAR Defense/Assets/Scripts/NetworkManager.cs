@@ -76,8 +76,10 @@ public class NetworkManager : MonoBehaviour
     private void OnConnect(SocketIOEvent obj)
     {
         m_isConnected = true;
+        Debug.Log("Connected to server");
         if (autoJoinDebug)
         {
+            Debug.Log("Joining debug room");
             CommandJoinRoom("debug");
         }
     }
@@ -104,7 +106,10 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Received game start");
         var playerData = PlayerJSON.CreateFromJSON(obj.data.ToString());
-        StartGameEvent(playerData);
+        if (autoJoinDebug)
+            GameController.instance.Initialize(playerData);
+        else
+            StartGameEvent(playerData);
     }
 
     private void HandleIncorrectRoomCode(SocketIOEvent obj)
