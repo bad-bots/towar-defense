@@ -16,11 +16,30 @@ public class UnitMovementBehaviour : MonoBehaviour
         distanceThreshold = Mathf.Pow(unitData.type.attackRange, 2);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // Update is called once per frame
+    void Update()
+    {
+        transform.LookAt(target);
+        if ((transform.localPosition - target.localPosition).sqrMagnitude > distanceThreshold)
+            transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform != target) return;
+        if (CheckTowerCollision(collision)) return;
+        if (CheckUnitCollision(collision)) return;
+    }
+
+    private bool CheckUnitCollision(Collision collision)
+    {
+        return false;
+    }
+
+    private bool CheckTowerCollision(Collision collision)
     {
         string towerName = "Tower" + (unitData.enemyPlayerNo);
-        Debug.Log("Enemy Tower: " + towerName);
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
+        if (collision.gameObject.CompareTag("Tower"))
         {
             int attackedPlayer = collision.gameObject.name == "Tower1" ? 1 : 2;
 
@@ -36,14 +55,9 @@ public class UnitMovementBehaviour : MonoBehaviour
             }
 
             Destroy(gameObject);
+            return true;
         }
+        return false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.LookAt(target);
-        if ((transform.localPosition - target.localPosition).sqrMagnitude > distanceThreshold)
-            transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
-    }
 }
