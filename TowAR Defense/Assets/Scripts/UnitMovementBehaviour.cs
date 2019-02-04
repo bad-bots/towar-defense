@@ -20,20 +20,17 @@ public class UnitMovementBehaviour : MonoBehaviour
     void Update()
     {
         transform.LookAt(target);
-        if ((transform.localPosition - target.localPosition).sqrMagnitude > distanceThreshold)
+        bool isInRange = (transform.localPosition - target.localPosition).sqrMagnitude < distanceThreshold;
+        if (target.CompareTag("Tower") || !isInRange)
             transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
+        else
+            Debug.Log("Smack");
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.transform != target) return;
         if (CheckTowerCollision(collision)) return;
-        if (CheckUnitCollision(collision)) return;
-    }
-
-    private bool CheckUnitCollision(Collision collision)
-    {
-        return false;
     }
 
     private bool CheckTowerCollision(Collision collision)

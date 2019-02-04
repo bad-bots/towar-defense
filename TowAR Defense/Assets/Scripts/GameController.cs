@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(UnitSpawner))]
 public class GameController : MonoBehaviour
 {
-    #region Public Members
+    #region Public Properties
     public bool isPlayer1
     {
         get
@@ -21,6 +21,9 @@ public class GameController : MonoBehaviour
             return m_initalized;
         }
     }
+    #endregion
+
+    #region Public Members
 
     public float doubloons;
     // [HideInInspector]

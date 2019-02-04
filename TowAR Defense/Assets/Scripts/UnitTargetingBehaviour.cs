@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 [RequireComponent(typeof(UnitMovementBehaviour))]
@@ -37,9 +38,8 @@ public class UnitTargetingBehaviour : MonoBehaviour
         if (targetMovement)
             SetTargetIfOnTower(targetMovement, this.transform);
 
-        string alliesTag = GameController.instance.isPlayer1 ? "Player1" : "Player2";
-        var allies = GameObject.FindGameObjectsWithTag(alliesTag);
-        foreach (GameObject allyGO in allies)
+        var allies = GameController.instance.unitSpawner.GetAllyUnits(unitData.playerNo);
+        foreach (UnitData allyGO in allies)
         {
             var allyMovement = allyGO.GetComponent<UnitMovementBehaviour>();
             SetTargetIfOnTower(allyMovement, target);
@@ -60,8 +60,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     private Transform FindNewTarget()
     {
-        string enemyTag = "Player" + (unitData.enemyPlayerNo);
-        var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        var enemies = GameController.instance.unitSpawner.GetEnemyUnits(unitData.playerNo);
         Transform target = FindNearestEnemy(enemies);
         if (target == null)
         {
@@ -71,12 +70,12 @@ public class UnitTargetingBehaviour : MonoBehaviour
         return target;
     }
 
-    private Transform FindNearestEnemy(GameObject[] enemies)
+    private Transform FindNearestEnemy(ReadOnlyCollection<UnitData> enemies)
     {
         Transform nearest = null;
         float minDistSqr = Mathf.Infinity;
         Vector3 currPostion = transform.position;
-        foreach (GameObject potentialTarget in enemies)
+        foreach (UnitData potentialTarget in enemies)
         {
             Vector3 dirToTarget = potentialTarget.transform.position - currPostion;
             float dSqrToTarget = dirToTarget.sqrMagnitude;
