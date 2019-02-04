@@ -13,6 +13,14 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public bool isInitialized
+    {
+        get
+        {
+            return m_initalized;
+        }
+    }
+
     public float doubloons;
     // [HideInInspector]
     public int castleHealth;
