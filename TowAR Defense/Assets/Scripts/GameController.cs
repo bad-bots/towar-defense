@@ -63,6 +63,8 @@ public class GameController : MonoBehaviour
         // Register network handlers
         NetworkManager.instance.SpawnUnitEvent += OnUnitSpawn;
         NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
+        NetworkManager.instance.UpdateDoubloons += updateDoubloons;
+
     }
 
     #endregion
@@ -108,6 +110,12 @@ public class GameController : MonoBehaviour
         CheckInitialized();
         Debug.Log("passed init");
         unitSpawner.SpawnUnit(unitTypeName, pos, rot, _isPlayer1);
+    }
+
+    // Update Doubloons
+    void updateDoubloons(NetworkManager.DecrementDoubloons playerData)
+    {
+        doubloons = playerData.doubloons;
     }
 
     void updateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
