@@ -94,13 +94,14 @@ public class NetworkManager : MonoBehaviour
     private void HandleSpawnUnit(SocketIOEvent obj)
     {
         string data = obj.data.ToString();
+        Debug.Log(data);
         var json = UnitJSON.CreateFromJSON(data);
         var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
         var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
         var isPlayer1 = json.playerNo == 1;
         var unitType = json.unitType != null ?
              json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
-             "Knight";
+             "Archer";
         SpawnUnitEvent(unitType, pos, rot, isPlayer1);
     }
 
