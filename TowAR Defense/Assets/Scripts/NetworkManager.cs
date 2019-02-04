@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("spawn", HandleSpawnUnit);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
-        socket.On("damage castle", HandleDamageCastle);
+        socket.On("damageCastle", HandleDamageCastle);
     }
 
     #endregion /* MONOBEHAVIOUR_METHODS */
@@ -89,17 +89,17 @@ public class NetworkManager : MonoBehaviour
     public void CommandCreateRoom(string roomName, Action<string> ack)
     {
         m_createRoomAcks += ack;
-        this.socket.Emit("init", JSONObject.CreateStringObject(roomName), AckCreateRoom);
+        this.socket.Emit("create", JSONObject.CreateStringObject(roomName), AckCreateRoom);
     }
 
     public void CommandJoinRoom(string roomCode)
     {
-        this.socket.Emit("start", JSONObject.CreateStringObject(roomCode));
+        this.socket.Emit("join", JSONObject.CreateStringObject(roomCode));
     }
 
     public void CommandSpawn(string unitType)
     {
-        this.socket.Emit("spawn new", JSONObject.CreateStringObject(unitType.ToLower()));
+        this.socket.Emit("spawn", JSONObject.CreateStringObject(unitType.ToLower()));
     }
 
     public void CommandDebugSpawn(Vector3 pos, Quaternion rot)
@@ -108,10 +108,10 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("spawn debug", new JSONObject(data));
     }
 
-    public void CommandTakeTowerDamage(string unitType, int attackedPlayer)
+    public void CommandTakeTowerDamage(string unitType, int attackedPlayerNo)
     {
-        string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayer));
-        this.socket.Emit("damage castle", new JSONObject(data));
+        string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayerNo));
+        this.socket.Emit("damageCastle", new JSONObject(data));
     }
 
     #endregion
