@@ -156,12 +156,12 @@ public class NetworkManager : MonoBehaviour
     public class TowerDamageJSON
     {
         public string unitType;
-        public int attackedPlayer;
+        public int attackedPlayerNo;
 
-        public TowerDamageJSON(string _unitType, int _attackedPlayer)
+        public TowerDamageJSON(string _unitType, int _attackedPlayerNo)
         {
             unitType = _unitType;
-            attackedPlayer = _attackedPlayer;
+            attackedPlayerNo = _attackedPlayerNo;
         }
 
         public static TowerDamageJSON CreateFromJSON(string data)
