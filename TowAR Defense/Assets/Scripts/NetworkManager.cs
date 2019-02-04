@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
 
     #region Socket Events
     public event Action<AttackedPlayerHealth> UpdateCastleHealth;
+    public event Action<DecrementDoubloons> UpdateDoubloons;
     public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action IncorrectRoomCodeEvent;
@@ -46,6 +47,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
+        socket.On("updatePlayerDoubloons", HandleUpdateDoubloons);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -92,6 +94,12 @@ public class NetworkManager : MonoBehaviour
     {
         var attackedPlayer = AttackedPlayerHealth.CreateFromJSON(obj.data.ToString());
         UpdateCastleHealth(attackedPlayer);
+    }
+
+    private void HandleUpdateDoubloons(SocketIOEvent obj)
+    {
+        var newDoubloons = DecrementDoubloons.CreateFromJSON(obj.data.ToString());
+        UpdateDoubloons(newDoubloons);
     }
 
     #endregion
@@ -191,6 +199,18 @@ public class NetworkManager : MonoBehaviour
         public static AttackedPlayerHealth CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<AttackedPlayerHealth>(data);
+        }
+    }
+
+    [Serializable]
+    public class DecrementDoubloons
+    {
+        public int playerNo;
+        public int doubloons;
+
+        public static DecrementDoubloons CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<DecrementDoubloons>(data);
         }
     }
 
