@@ -57,6 +57,10 @@ public class UnitMovementBehaviour : MonoBehaviour
             }
 
             Destroy(gameObject);
+            return true;
         }
+
+        return false;
     }
+
 }
