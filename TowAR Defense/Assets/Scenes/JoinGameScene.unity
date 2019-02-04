@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2325,6 +2325,7 @@ PrefabInstance:
       propertyPath: url
       value: ws://10.1.41.126:8080/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
+
     m_RemovedComponents:
     - {fileID: 5371901635332089396, guid: 8a6a56c1694ccea4788970d7ccc3ec91, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8a6a56c1694ccea4788970d7ccc3ec91, type: 3}
