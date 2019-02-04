@@ -46,11 +46,23 @@ public class NetworkManager : MonoBehaviour
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damage castle", HandleDamageCastle);
+
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
+        {
+            Debug.LogWarning("Started Game in Game Scene. Joining debug room");
+            StartCoroutine(JoinDebugRoom());
+        }
     }
 
     #endregion /* MONOBEHAVIOUR_METHODS */
 
     #region Event Handlers
+
+    private IEnumerator JoinDebugRoom()
+    {
+        yield return new WaitForEndOfFrame();
+        CommandJoinRoom("debug");
+    }
 
     private void HandleSpawnUnit(SocketIOEvent obj)
     {
