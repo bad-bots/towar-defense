@@ -9,13 +9,25 @@ public class NetworkManager : MonoBehaviour
     #region Public Members
     public static NetworkManager instance = null;
     public Action onSpawnKnight = null;
+    #endregion
 
+    #region Public Properties
+    public bool isConnected
+    {
+        get
+        {
+            return m_isConnected;
+        }
+    }
     #endregion
 
     #region Private Members
     private SocketIOComponent socket;
 
     private Action<string> m_createRoomAcks;
+
+    private bool autoJoinDebug = false;
+    private bool m_isConnected = false;
     #endregion
 
     #region Socket Events
@@ -42,6 +54,9 @@ public class NetworkManager : MonoBehaviour
     {
         this.socket = this.GetComponent<SocketIOComponent>();
 
+        socket.On("connect", OnConnect);
+        socket.On("disconnect", OnDisconnect);
+
         socket.On("spawn", HandleSpawnUnit);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
@@ -50,7 +65,7 @@ public class NetworkManager : MonoBehaviour
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
             Debug.LogWarning("Started Game in Game Scene. Joining debug room");
-            StartCoroutine(JoinDebugRoom());
+            autoJoinDebug = true;
         }
     }
 
@@ -58,10 +73,18 @@ public class NetworkManager : MonoBehaviour
 
     #region Event Handlers
 
-    private IEnumerator JoinDebugRoom()
+    private void OnConnect(SocketIOEvent obj)
     {
-        yield return new WaitForEndOfFrame();
-        CommandJoinRoom("debug");
+        m_isConnected = true;
+        if (autoJoinDebug)
+        {
+            CommandJoinRoom("debug");
+        }
+    }
+
+    private void OnDisconnect(SocketIOEvent obj)
+    {
+        m_isConnected = false;
     }
 
     private void HandleSpawnUnit(SocketIOEvent obj)
@@ -79,6 +102,7 @@ public class NetworkManager : MonoBehaviour
 
     private void HandleStartGame(SocketIOEvent obj)
     {
+        Debug.Log("Received game start");
         var playerData = PlayerJSON.CreateFromJSON(obj.data.ToString());
         StartGameEvent(playerData);
     }
