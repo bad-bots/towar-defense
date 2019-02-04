@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5408242020230002342}
   - component: {fileID: 3287805248805938407}
+  - component: {fileID: 2883964194801482300}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -46,3 +47,15 @@ MonoBehaviour:
   doubloons: 0
   castleHealth: 0
   enemyCastleHealth: 0
+--- !u!114 &2883964194801482300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2383218125033968349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148781fc33a311343b3ffb5fa385d430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
