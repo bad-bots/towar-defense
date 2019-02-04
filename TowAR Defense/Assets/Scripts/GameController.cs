@@ -107,7 +107,7 @@ public class GameController : MonoBehaviour
     private void OnUnitSpawn(string unitTypeName, Vector3 position, Quaternion rotation, bool _isPlayer1)
     {
         CheckInitialized();
-        Debug.Log("Spawning");
+        Debug.Log("Spawning " + unitTypeName);
         UnitType unitType = null;
         if (m_unitTypes.TryGetValue(unitTypeName, out unitType))
         {
