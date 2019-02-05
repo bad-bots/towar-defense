@@ -2950,6 +2950,7 @@ GameObject:
   - component: {fileID: 505839966462133475}
   - component: {fileID: 7255007106227985662}
   - component: {fileID: 2633554866953122946}
+  - component: {fileID: 4621519273011296281}
   m_Layer: 0
   m_Name: knigthprefab
   m_TagString: Unit
@@ -3066,3 +3067,21 @@ MonoBehaviour:
   type: {fileID: 0}
   currentHealth: 0
   playerNo: 1
+  unitId: 0
+--- !u!114 &4621519273011296281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969145986120274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b57c04730e38eb43a53eddd02cf54b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  maxHealth: 0
+  healthBarPrefab: {fileID: 377040851617020992, guid: b8b7c5d8732ce5446a6abc8067762a53,
+    type: 3}
+  alwaysShowHealth: 0
