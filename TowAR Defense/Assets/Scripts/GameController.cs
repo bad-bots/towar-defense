@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(UnitSpawner))]
 public class GameController : MonoBehaviour
 {
-    #region Public Members
+    #region Public Properties
     public bool isPlayer1
     {
         get
@@ -21,6 +21,9 @@ public class GameController : MonoBehaviour
             return m_initalized;
         }
     }
+    #endregion
+
+    #region Public Members
 
     public float doubloons;
     // [HideInInspector]
@@ -62,8 +65,9 @@ public class GameController : MonoBehaviour
 
         // Register network handlers
         NetworkManager.instance.SpawnUnitEvent += OnUnitSpawn;
-        NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
-        NetworkManager.instance.UpdateDoubloons += updateDoubloons;
+        NetworkManager.instance.UpdateCastleHealthEvent += UpdateCastleHealth;
+        NetworkManager.instance.UpdateUnitHealthEvent += UpdateUnitHealth;
+        NetworkManager.instance.UpdateDoubloonsEvents += updateDoubloons;
 
     }
 
@@ -100,25 +104,31 @@ public class GameController : MonoBehaviour
         NetworkManager.instance.CommandTakeTowerDamage(unitType, attackedPlayer);
     }
 
+    public void RequestUnitDamage(int attackerId, int defenderId)
+    {
+        CheckInitialized();
+        NetworkManager.instance.CommandTakeUnitDamage(attackerId, defenderId);
+    }
+
     #endregion
 
     #region Event Handlers
 
-    private void OnUnitSpawn(string unitTypeName, Vector3 pos, Quaternion rot, bool _isPlayer1)
+    private void OnUnitSpawn(string unitTypeName, Vector3 pos, Quaternion rot, bool _isPlayer1, int unitId)
     {
         Debug.Log("Spawning unit from controller");
         CheckInitialized();
         Debug.Log("passed init");
-        unitSpawner.SpawnUnit(unitTypeName, pos, rot, _isPlayer1);
+        unitSpawner.SpawnUnit(unitTypeName, pos, rot, _isPlayer1, unitId);
     }
 
     // Update Doubloons
-    void updateDoubloons(NetworkManager.DecrementDoubloons playerData)
+    void updateDoubloons(NetworkManager.UpdateDoubloons playerData)
     {
         doubloons = playerData.doubloons;
     }
 
-    void updateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
+    private void UpdateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
     {
         if (attackedPlayerHealth.playerNo == 1 && isPlayer1)
         {
@@ -135,6 +145,18 @@ public class GameController : MonoBehaviour
         else
         {
             castleHealth = attackedPlayerHealth.castleHealth;
+        }
+    }
+
+    private void UpdateUnitHealth(NetworkManager.UnitHealthJSON unitHealthJSON)
+    {
+        var allUnits = unitHealthJSON.playerNo == 1 ? unitSpawner.p1_units : unitSpawner.p2_units;
+        foreach (var unit in allUnits)
+        {
+            if (unit.unitId == unitHealthJSON.unitId)
+            {
+                unit.currentHealth = unitHealthJSON.health;
+            }
         }
     }
     #endregion

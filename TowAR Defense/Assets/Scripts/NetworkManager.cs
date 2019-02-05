@@ -31,10 +31,11 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Socket Events
-    public event Action<AttackedPlayerHealth> UpdateCastleHealth;
-    public event Action<DecrementDoubloons> UpdateDoubloons;
-    public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
+    public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
+    public event Action<UpdateDoubloons> UpdateDoubloonsEvents;
+    public event Action<string, Vector3, Quaternion, bool, int> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
+    public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
     #endregion
 
@@ -62,6 +63,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
+        socket.On("damageUnit", HandleUpdateUnitHealth);
         socket.On("updatePlayerDoubloons", HandleUpdateDoubloons);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
@@ -82,7 +84,7 @@ public class NetworkManager : MonoBehaviour
         if (autoJoinDebug)
         {
             Debug.Log("Joining debug room");
-            CommandJoinRoom("debug");
+            CommandJoinRoom("debugAI");
         }
     }
 
@@ -101,8 +103,8 @@ public class NetworkManager : MonoBehaviour
         var isPlayer1 = json.playerNo == 1;
         var unitType = json.unitType != null ?
              json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
-             "Archer";
-        SpawnUnitEvent(unitType, pos, rot, isPlayer1);
+             "Knight";
+        SpawnUnitEvent(unitType, pos, rot, isPlayer1, json.unitId);
     }
 
     private void HandleStartGame(SocketIOEvent obj)
@@ -123,13 +125,19 @@ public class NetworkManager : MonoBehaviour
     private void HandleDamageCastle(SocketIOEvent obj)
     {
         var attackedPlayer = AttackedPlayerHealth.CreateFromJSON(obj.data.ToString());
-        UpdateCastleHealth(attackedPlayer);
+        UpdateCastleHealthEvent(attackedPlayer);
+    }
+
+    private void HandleUpdateUnitHealth(SocketIOEvent obj)
+    {
+        var unitHealthJSON = UnitHealthJSON.CreateFromJSON(obj.data.ToString());
+        UpdateUnitHealthEvent(unitHealthJSON);
     }
 
     private void HandleUpdateDoubloons(SocketIOEvent obj)
     {
-        var newDoubloons = DecrementDoubloons.CreateFromJSON(obj.data.ToString());
-        UpdateDoubloons(newDoubloons);
+        var newDoubloons = UpdateDoubloons.CreateFromJSON(obj.data.ToString());
+        UpdateDoubloonsEvents(newDoubloons);
     }
 
     #endregion
@@ -162,6 +170,13 @@ public class NetworkManager : MonoBehaviour
     {
         string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayerNo));
         this.socket.Emit("damageCastle", new JSONObject(data));
+    }
+
+    public void CommandTakeUnitDamage(int attackerId, int defenderId)
+    {
+        string data = JsonUtility.ToJson(new UnitDamageJSON(attackerId, defenderId));
+        Debug.Log("Sending data: " + data);
+        this.socket.Emit("damageUnit", new JSONObject(data));
     }
 
     #endregion
@@ -233,14 +248,40 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
-    public class DecrementDoubloons
+    public class UnitDamageJSON
+    {
+        public int attackerId;
+        public int defenderId;
+
+        public UnitDamageJSON(int _attackerId, int _defenderId)
+        {
+            attackerId = _attackerId;
+            defenderId = _defenderId;
+        }
+    }
+
+    [Serializable]
+    public class UnitHealthJSON
+    {
+        public int playerNo;
+        public int unitId;
+        public float health;
+
+        public static UnitHealthJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UnitHealthJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class UpdateDoubloons
     {
         public int playerNo;
         public int doubloons;
 
-        public static DecrementDoubloons CreateFromJSON(string data)
+        public static UpdateDoubloons CreateFromJSON(string data)
         {
-            return JsonUtility.FromJson<DecrementDoubloons>(data);
+            return JsonUtility.FromJson<UpdateDoubloons>(data);
         }
     }
 
@@ -252,6 +293,7 @@ public class NetworkManager : MonoBehaviour
         public float[] position;
         public float[] rotation;
         public string unitType;
+        public int unitId;
 
         public UnitJSON(Vector3 _position, Quaternion _rotation, string _unitType)
         {

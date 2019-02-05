@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 8818078975902488215}
   - component: {fileID: 2522645026263429727}
   - component: {fileID: 6110590711685274686}
+  - component: {fileID: 3843676777184814932}
   m_Layer: 0
   m_Name: Meshtint Free Knight
   m_TagString: Unit
@@ -210,7 +211,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -224,8 +225,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f093067ff338d124d8588ed7b51aee9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &3593718034606223587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,11 +237,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a643e7e6a4d67834099e98afea752f2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   type: {fileID: 0}
   currentHealth: 0
   playerNo: 1
+  unitId: 0
 --- !u!114 &8818078975902488215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,8 +253,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 044bee4924447404f97f8faac2315f1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   target: {fileID: 0}
 --- !u!65 &2522645026263429727
 BoxCollider:
@@ -283,6 +285,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3843676777184814932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022148595836406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b57c04730e38eb43a53eddd02cf54b0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  health: 0
+  maxHealth: 0
+  healthBarPrefab: {fileID: 377040851617020992, guid: b8b7c5d8732ce5446a6abc8067762a53,
+    type: 3}
 --- !u!1 &1087546517206048
 GameObject:
   m_ObjectHideFlags: 0
