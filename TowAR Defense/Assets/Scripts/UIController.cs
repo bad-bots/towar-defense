@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
+    private bool cooldown = false;
+
     public void SpawnKnight()
     {
         GameController.instance.RequestSpawnUnit("Knight");
@@ -11,11 +13,19 @@ public class UIController : MonoBehaviour
 
     public void SpawnUnit(string unitType)
     {
-        GameController.instance.RequestSpawnUnit(unitType);
+        if ( cooldown == false ) {
+            //Do something
+            GameController.instance.RequestSpawnUnit(unitType);
+            Invoke("ResetCooldown",2.0f);
+            cooldown = true;
+     }
     }
 
     public void DebugSpawnNight()
     {
         GameController.instance.RequestDebugSpawnUnit();
     }
+    void ResetCooldown(){
+     cooldown = false;
+ }
 }
