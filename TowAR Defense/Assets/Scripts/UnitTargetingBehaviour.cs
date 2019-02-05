@@ -23,6 +23,14 @@ public class UnitTargetingBehaviour : MonoBehaviour
     {
         SelectNewTarget();
     }
+
+    void Update()
+    {
+        if (movementBehaviour.target == null)
+        {
+            SelectNewTarget();
+        }
+    }
     #endregion
 
     #region Public Methods
