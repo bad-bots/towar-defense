@@ -10,10 +10,15 @@ public class UnitMovementBehaviour : MonoBehaviour
     private float distanceThreshold;
     private UnitData unitData;
 
+    private float nextAttackTime = 0f;
+    private bool isAttackingPlayer = false;
+
     void Start()
     {
         unitData = GetComponent<UnitData>();
         distanceThreshold = Mathf.Pow(unitData.type.attackRange, 2);
+
+        isAttackingPlayer = (GameController.instance.isPlayer1 ? 1 : 2) == unitData.playerNo;
     }
 
     // Update is called once per frame
@@ -24,7 +29,7 @@ public class UnitMovementBehaviour : MonoBehaviour
         if (target.CompareTag("Tower") || !isInRange)
             transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
         else
-            Debug.Log("Smack");
+            TryAttackUnit(target.GetComponent<UnitData>());
     }
 
     void OnCollisionEnter(Collision collision)
@@ -55,6 +60,15 @@ public class UnitMovementBehaviour : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void TryAttackUnit(UnitData unit)
+    {
+        if (Time.time > nextAttackTime)
+        {
+            nextAttackTime = Time.time + (1.0f / unitData.type.attackSpeed);
+            if (isAttackingPlayer) GameController.instance.RequestUnitDamage(unitData.unitId, unit.unitId);
+        }
     }
 
 }

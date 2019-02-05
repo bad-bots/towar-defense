@@ -50,7 +50,7 @@ public class UnitSpawner : MonoBehaviour
 
     #region Public Methods
 
-    public void SpawnUnit(string unitTypeName, Vector3 position, Quaternion rotation, bool isPlayer1)
+    public void SpawnUnit(string unitTypeName, Vector3 position, Quaternion rotation, bool isPlayer1, int unitId = 0)
     {
         Debug.Log("Spawning");
         UnitType unitType = null;
@@ -63,6 +63,7 @@ public class UnitSpawner : MonoBehaviour
             var unitData = spawnedUnit.GetComponent<UnitData>();
             unitData.type = unitType;
             unitData.playerNo = isPlayer1 ? 1 : 2;
+            unitData.unitId = unitId;
 
             // Add to list of created units
             (isPlayer1 ? m_p1_units : m_p2_units).Add(unitData);

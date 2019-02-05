@@ -31,9 +31,10 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Socket Events
-    public event Action<AttackedPlayerHealth> UpdateCastleHealth;
-    public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
+    public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
+    public event Action<string, Vector3, Quaternion, bool, int> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
+    public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
     #endregion
 
@@ -61,6 +62,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
+        socket.On("damageUnit", HandleUpdateUnitHealth);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -99,7 +101,7 @@ public class NetworkManager : MonoBehaviour
         var unitType = json.unitType != null ?
              json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
              "Knight";
-        SpawnUnitEvent(unitType, pos, rot, isPlayer1);
+        SpawnUnitEvent(unitType, pos, rot, isPlayer1, json.unitId);
     }
 
     private void HandleStartGame(SocketIOEvent obj)
@@ -120,7 +122,13 @@ public class NetworkManager : MonoBehaviour
     private void HandleDamageCastle(SocketIOEvent obj)
     {
         var attackedPlayer = AttackedPlayerHealth.CreateFromJSON(obj.data.ToString());
-        UpdateCastleHealth(attackedPlayer);
+        UpdateCastleHealthEvent(attackedPlayer);
+    }
+
+    private void HandleUpdateUnitHealth(SocketIOEvent obj)
+    {
+        var unitHealthJSON = UnitHealthJSON.CreateFromJSON(obj.data.ToString());
+        UpdateUnitHealthEvent(unitHealthJSON);
     }
 
     #endregion
@@ -153,6 +161,13 @@ public class NetworkManager : MonoBehaviour
     {
         string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayerNo));
         this.socket.Emit("damageCastle", new JSONObject(data));
+    }
+
+    public void CommandTakeUnitDamage(int attackerId, int defenderId)
+    {
+        string data = JsonUtility.ToJson(new UnitDamageJSON(attackerId, defenderId));
+        Debug.Log("Sending data: " + data);
+        this.socket.Emit("damageUnit", new JSONObject(data));
     }
 
     #endregion
@@ -223,6 +238,31 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class UnitDamageJSON
+    {
+        public int attackerId;
+        public int defenderId;
+
+        public UnitDamageJSON(int _attackerId, int _defenderId)
+        {
+            attackerId = _attackerId;
+            defenderId = _defenderId;
+        }
+    }
+
+    [Serializable]
+    public class UnitHealthJSON
+    {
+        public int playerNo;
+        public int unitId;
+        public float health;
+
+        public static UnitHealthJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UnitHealthJSON>(data);
+        }
+    }
 
     [Serializable]
     public class UnitJSON
@@ -231,6 +271,7 @@ public class NetworkManager : MonoBehaviour
         public float[] position;
         public float[] rotation;
         public string unitType;
+        public int unitId;
 
         public UnitJSON(Vector3 _position, Quaternion _rotation, string _unitType)
         {
