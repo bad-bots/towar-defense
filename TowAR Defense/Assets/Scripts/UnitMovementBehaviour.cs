@@ -13,9 +13,6 @@ public class UnitMovementBehaviour : MonoBehaviour
     private float nextAttackTime = 0f;
     private bool isAttackingPlayer = false;
 
-    // FIXME remove this nonsense
-    private bool hasAttacked = false;
-
     void Start()
     {
         unitData = GetComponent<UnitData>();
@@ -70,10 +67,9 @@ public class UnitMovementBehaviour : MonoBehaviour
 
     private void TryAttackUnit(UnitData unit)
     {
-        if (Time.time > nextAttackTime && !hasAttacked)
+        if (Time.time > nextAttackTime)
         {
             nextAttackTime = Time.time + (1.0f / unitData.type.attackSpeed);
-            // hasAttacked = true;
             if (isAttackingPlayer) GameController.instance.RequestUnitDamage(unitData.unitId, unit.unitId);
         }
     }
