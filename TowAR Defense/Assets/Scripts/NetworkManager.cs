@@ -84,7 +84,7 @@ public class NetworkManager : MonoBehaviour
         if (autoJoinDebug)
         {
             Debug.Log("Joining debug room");
-            CommandJoinRoom("debug");
+            CommandJoinRoom("debugAI");
         }
     }
 
