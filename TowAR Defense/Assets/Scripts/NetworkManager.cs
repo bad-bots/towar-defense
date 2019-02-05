@@ -32,6 +32,7 @@ public class NetworkManager : MonoBehaviour
 
     #region Socket Events
     public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
+    public event Action<UpdateDoubloons> UpdateDoubloonsEvents;
     public event Action<string, Vector3, Quaternion, bool, int> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
@@ -63,6 +64,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
         socket.On("damageUnit", HandleUpdateUnitHealth);
+        socket.On("updatePlayerDoubloons", HandleUpdateDoubloons);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -94,6 +96,7 @@ public class NetworkManager : MonoBehaviour
     private void HandleSpawnUnit(SocketIOEvent obj)
     {
         string data = obj.data.ToString();
+        Debug.Log(data);
         var json = UnitJSON.CreateFromJSON(data);
         var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
         var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
@@ -129,6 +132,12 @@ public class NetworkManager : MonoBehaviour
     {
         var unitHealthJSON = UnitHealthJSON.CreateFromJSON(obj.data.ToString());
         UpdateUnitHealthEvent(unitHealthJSON);
+    }
+
+    private void HandleUpdateDoubloons(SocketIOEvent obj)
+    {
+        var newDoubloons = UpdateDoubloons.CreateFromJSON(obj.data.ToString());
+        UpdateDoubloonsEvents(newDoubloons);
     }
 
     #endregion
@@ -263,6 +272,19 @@ public class NetworkManager : MonoBehaviour
             return JsonUtility.FromJson<UnitHealthJSON>(data);
         }
     }
+
+    [Serializable]
+    public class UpdateDoubloons
+    {
+        public int playerNo;
+        public int doubloons;
+
+        public static UpdateDoubloons CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UpdateDoubloons>(data);
+        }
+    }
+
 
     [Serializable]
     public class UnitJSON

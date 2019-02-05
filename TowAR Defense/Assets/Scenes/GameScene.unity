@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -200,7 +200,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: knight
+          m_StringArgument: Phalanx
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1541,6 +1541,7 @@ GameObject:
   - component: {fileID: 503394619}
   - component: {fileID: 503394621}
   - component: {fileID: 503394620}
+  - component: {fileID: 503394622}
   m_Layer: 5
   m_Name: DoubloonsAmount
   m_TagString: Untagged
@@ -1609,6 +1610,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503394618}
   m_CullTransparentMesh: 0
+--- !u!114 &503394622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503394618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5906f7a14ec4043148de005ebe8ac79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &652589315
 GameObject:
   m_ObjectHideFlags: 0
@@ -2316,7 +2329,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: knight
+          m_StringArgument: archer
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -2609,30 +2622,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.14424333
+      value: 0.10849054
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.44697762
+      value: -0.40402344
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.07328269
+      value: 0.048326842
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.87979233
+      value: 0.9070057
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
 --- !u!1001 &1351436654
@@ -2702,32 +2715,52 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.14303982
+      value: -0.106499426
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.43868038
+      value: -0.39155856
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.070955135
+      value: 0.0456831
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.88434416
+      value: -0.91282684
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+--- !u!1 &1351436655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 782560962, guid: f4f6b630159e6b34386dec2579f250b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1351436654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1351436656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351436655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee111879b43239940bb9d5cb1c1b44c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castleHealth: {fileID: 0}
+  enemyCastleHealth: {fileID: 0}
 --- !u!1 &1382546271
 GameObject:
   m_ObjectHideFlags: 0
@@ -3003,7 +3036,7 @@ GameObject:
   - component: {fileID: 1502927249}
   - component: {fileID: 1502927248}
   m_Layer: 5
-  m_Name: SpawnPikemanButton
+  m_Name: SpawnPhalanxButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3078,7 +3111,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: knight
+          m_StringArgument: phalanx
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -3874,7 +3907,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: knight
+          m_StringArgument: archer
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
