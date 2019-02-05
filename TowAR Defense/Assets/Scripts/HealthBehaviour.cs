@@ -8,17 +8,17 @@ public class HealthBehaviour : MonoBehaviour
     public float health;
     public float maxHealth;
     public GameObject healthBarPrefab;
+    public bool alwaysShowHealth = false;
 
     private Slider m_healthBar;
-    private float lastHealth;
+    private float lastHealth = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         var healthCanvas = Instantiate(healthBarPrefab, transform);
         m_healthBar = healthCanvas.GetComponentInChildren<Slider>();
-        if (health == maxHealth)
-            m_healthBar.gameObject.SetActive(false);
+        CheckShowHealthBar();
     }
 
     // Update is called once per frame
@@ -32,14 +32,21 @@ public class HealthBehaviour : MonoBehaviour
         {
             m_healthBar.value = health;
             m_healthBar.maxValue = maxHealth;
-            if (health == maxHealth)
-            {
-                m_healthBar.gameObject.SetActive(false);
-            }
-            else
-            {
-                m_healthBar.gameObject.SetActive(true);
-            }
+            CheckShowHealthBar();
+        }
+    }
+
+    private void CheckShowHealthBar()
+    {
+        if (alwaysShowHealth) return;
+
+        if (health != maxHealth)
+        {
+            m_healthBar.gameObject.SetActive(true);
+        }
+        else
+        {
+            m_healthBar.gameObject.SetActive(false);
         }
     }
 }
