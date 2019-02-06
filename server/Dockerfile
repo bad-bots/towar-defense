@@ -1,7 +1,6 @@
 FROM node:10.15.1-alpine
 
-# Create user
-USER ubuntu
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -10,11 +9,10 @@ COPY package*.json ./
 RUN npm install --production
 
 # Copy app soruce
-Copy . .
-
-# Clean up
-RUN rm "./env.production"
+COPY . .
 
 EXPOSE 8080
 
-CMD ["node", "index.js"]
+# Set user
+
+CMD ["npm","run", "prod"]
