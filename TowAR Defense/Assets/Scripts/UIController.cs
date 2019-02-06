@@ -23,7 +23,7 @@ public class UIController : MonoBehaviour
         GameController.instance.RequestSpawnUnit(unitType);
         foreach(var button in spawnUnitButtonsType)
         {
-            if(button.name.StartsWith("spawn" + unitType, true, System.Globalization.CultureInfo.CurrentCulture))
+            if((button.name.StartsWith("spawn" + unitType, true, System.Globalization.CultureInfo.CurrentCulture)) || (button.name.StartsWith("ATTACK" + unitType, true, System.Globalization.CultureInfo.CurrentCulture)))
             {
                 button.interactable = false;
                 StartCoroutine(ResetCooldown(2.0f, button));
