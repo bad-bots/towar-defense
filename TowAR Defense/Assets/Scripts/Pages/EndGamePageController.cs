@@ -29,7 +29,6 @@ public class EndGamePageController : MonoBehaviour
 
     public void PlayAgain()
     {
-        NetworkManager.instance.CommandRestartGame();
         NetworkManager.instance.CommandJoinRoom(PersistantStats.joinToken);
     }
 
