@@ -2622,10 +2622,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.11697468
@@ -2646,6 +2642,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
 --- !u!1001 &1351436654
@@ -2715,10 +2715,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.11497775
@@ -2739,6 +2735,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
 --- !u!1 &1351436655 stripped
@@ -2922,6 +2922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b8cd72eab3342b448bd354a754ca90a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnUnitButtonsType: []
+  spawnUnitButton: {fileID: 0}
 --- !u!114 &1400627861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3555,7 +3557,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.3679245, g: 0.35230508, b: 0.35230508, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
