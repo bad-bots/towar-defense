@@ -1,11 +1,16 @@
 {
   "name": "bad-botz",
   "version": "1.0.0",
-  "description": "",
+  "description": "Server for TowAR Defense multiplayer game.",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/bad-bots/towar-defense.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=development nodemon index.js"
+    "start": "cross-env NODE_ENV=development nodemon index.js",
+    "prod": "NODE_ENV=production node index.js"
   },
   "author": "The B4dB0tz",
   "license": "ISC",
@@ -19,7 +24,9 @@
     "ip": "^1.1.5",
     "lokijs": "^1.5.6",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.9",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
   }
 }
