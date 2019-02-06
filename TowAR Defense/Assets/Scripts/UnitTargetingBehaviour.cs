@@ -26,7 +26,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (movementBehaviour.target == null)
+        if ((movementBehaviour.target == null || movementBehaviour.target.GetComponent<UnitData>().currentHealth <= 0) && unitData.currentHealth > 0)
         {
             SelectNewTarget();
         }
@@ -37,6 +37,7 @@ public class UnitTargetingBehaviour : MonoBehaviour
 
     public void SelectNewTarget(Transform target = null)
     {
+      
         if (target == null)
         {
             target = FindNewTarget();
