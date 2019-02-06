@@ -13,7 +13,7 @@ const getLatestRoom = rooms => {
     const gameRoom = gameState.getRoomByRoomId(roomId);
     if (gameRoom && gameRoom.meta.created > createdTime) {
       latestGame = gameRoom;
-      createdTime = gameRoom.meta.created
+      createdTime = gameRoom.meta.created;
     }
   });
 
@@ -27,7 +27,7 @@ module.exports = io => {
     );
 
     // Create room and add room creator as P1
-    socket.on("create", (roomName, ack) => {
+    socket.on("create", roomName => {
       // Do not create debug room  because it is created on server init.
       if (roomName === "debug" || roomName === "debugAI") {
         return;
@@ -40,7 +40,7 @@ module.exports = io => {
 
       socket.join(gameRoom.roomId);
 
-      ack(gameRoom.joinToken);
+      socket.emit("init", {joinToken: gameRoom.joinToken});
       console.log(`Client ${socket.id} has created room "${roomName}"`);
     });
 
@@ -111,15 +111,27 @@ module.exports = io => {
           }, 1500);
         }
       } else if (gameRoom.player1 && gameRoom.player2) {
-        io.to(gameRoom.player1.socketId).emit('start', { enemyCastleHealth: gameRoom.player2.castleHealth, ...gameRoom.player1 })
-        io.to(gameRoom.player2.socketId).emit('start', { enemyCastleHealth: gameRoom.player1.castleHealth, ...gameRoom.player2 })
+        io.to(gameRoom.player1.socketId).emit("start", {
+          enemyCastleHealth: gameRoom.player2.castleHealth,
+          ...gameRoom.player1
+        });
+        io.to(gameRoom.player2.socketId).emit("start", {
+          enemyCastleHealth: gameRoom.player1.castleHealth,
+          ...gameRoom.player2
+        });
 
         gameRoom.interval = setInterval(() => {
           gameRoom.player1.doubloons += 100;
           gameRoom.player2.doubloons += 100;
-          io.to(gameRoom.player1.socketId).emit('updatePlayerDoubloons', { playerNo: 1, doubloons: gameRoom.player1.doubloons })
-          io.to(gameRoom.player2.socketId).emit('updatePlayerDoubloons', { playerNo: 2, doubloons: gameRoom.player2.doubloons })
-        }, 5000)
+          io.to(gameRoom.player1.socketId).emit("updatePlayerDoubloons", {
+            playerNo: 1,
+            doubloons: gameRoom.player1.doubloons
+          });
+          io.to(gameRoom.player2.socketId).emit("updatePlayerDoubloons", {
+            playerNo: 2,
+            doubloons: gameRoom.player2.doubloons
+          });
+        }, 5000);
       }
       console.log(`Client ${socket.id} has joined game. Game has started.`);
     });
@@ -210,7 +222,7 @@ module.exports = io => {
       }
     });
 
-    socket.on("damageUnit", ({ attackerId, defenderId  }) => {
+    socket.on("damageUnit", ({ attackerId, defenderId }) => {
       // Get latest game room
       const gameRoom = getLatestRoom(socket.rooms);
       if (!gameRoom) {
@@ -237,7 +249,7 @@ module.exports = io => {
 
       console.log(
         `${attackerId} attacked ${defenderId} for ${damage} leaving it with ${
-        defender.health
+          defender.health
         } hp`
       );
 
@@ -257,6 +269,7 @@ module.exports = io => {
       // gameState.destroyPlayer(socket.id);
       // gameState.destorySpectator(socket.id);
 
+      console.log("leaving");
       const roomNames = getAllGameRoomIds(socket.rooms);
       roomNames.forEach(roomName => {
         socket.leave(roomName);
@@ -271,13 +284,13 @@ module.exports = io => {
       roomIds.forEach(roomId => {
         socket.leave(roomId);
         const gameRoom = gameState.getRoomByRoomId(roomId);
-        if (gameRoom.roomName === 'debug') {
+        if (gameRoom.roomName === "debug") {
           gameState.resetDebugRoom();
         }
 
         // Destroy gameRoom if there are no players left;
       });
-      
+
       console.log(`Connection ${socket.id} has left the building`);
     });
   });

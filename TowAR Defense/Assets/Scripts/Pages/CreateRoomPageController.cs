@@ -13,19 +13,16 @@ public class CreateRoomPageController : MonoBehaviour
     public void HandleCreateRoom()
     {
         string roomName = roomNameInput.text;
-        statusMessageText.text = "Loading....";
+        NetworkManager.instance.InitRoomEvent += OnRoomCreated;
         NetworkManager.instance.CommandCreateRoom(roomName, OnRoomCreated);
 
     }
 
-    private void OnRoomCreated(string joinToken)
+    private void OnRoomCreated(string JoinToken)
     {
-        statusMessageText.text = "Created Room!\nGive this code to your buddy!";
-        PersistantStats.joinToken = joinToken;
-        roomCodeText.text = joinToken;
-        roomCodeText.gameObject.SetActive(true);
-        roomNameInput.interactable = false;
-        button.SetActive(false);
+        PersistantStats.joinToken = JoinToken;
+        NetworkManager.instance.InitRoomEvent -= OnRoomCreated;
+        PageController.instance.SwitchPage("GamePendingPage");
     }
 
 }
