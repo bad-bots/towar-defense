@@ -114,12 +114,12 @@ public class GameController : MonoBehaviour
 
     #region Event Handlers
 
-    private void OnUnitSpawn(string unitTypeName, Vector3 pos, Quaternion rot, bool _isPlayer1, int unitId)
+    private void OnUnitSpawn(NetworkManager.UnitSpawnData spawnData)
     {
         Debug.Log("Spawning unit from controller");
         CheckInitialized();
         Debug.Log("passed init");
-        unitSpawner.SpawnUnit(unitTypeName, pos, rot, _isPlayer1, unitId);
+        unitSpawner.SpawnUnit(spawnData);
     }
 
     // Update Doubloons

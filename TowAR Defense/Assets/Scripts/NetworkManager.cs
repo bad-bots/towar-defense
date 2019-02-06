@@ -33,7 +33,7 @@ public class NetworkManager : MonoBehaviour
     #region Socket Events
     public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
     public event Action<UpdateDoubloons> UpdateDoubloonsEvents;
-    public event Action<string, Vector3, Quaternion, bool, int> SpawnUnitEvent;
+    public event Action<UnitSpawnData> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
@@ -98,13 +98,13 @@ public class NetworkManager : MonoBehaviour
         string data = obj.data.ToString();
         Debug.Log(data);
         var json = UnitJSON.CreateFromJSON(data);
-        var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
-        var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
         var isPlayer1 = json.playerNo == 1;
         var unitType = json.unitType != null ?
              json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
              "Knight";
-        SpawnUnitEvent(unitType, pos, rot, isPlayer1, json.unitId);
+        var spawnData = new UnitSpawnData(json.playerNo, json.position, json.rotation,
+            unitType, json.unitId, json.spawnTime);
+        SpawnUnitEvent(spawnData);
     }
 
     private void HandleStartGame(SocketIOEvent obj)
@@ -192,6 +192,26 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region JSON Message Classes
+
+    public class UnitSpawnData
+    {
+        public int playerNo;
+        public Vector3 position;
+        public Quaternion rotation;
+        public string unitType;
+        public int unitId;
+        public int spawnTime;
+
+        public UnitSpawnData(int _playerNo, float[] _position, float[] _rotation, string _unitType, int _unitId, int _spawnTime)
+        {
+            playerNo = _playerNo;
+            position = new Vector3(_position[0], _position[1], _position[2]);
+            rotation = Quaternion.Euler(_rotation[0], _rotation[1], _rotation[2]);
+            unitType = _unitType;
+            unitId = _unitId;
+            spawnTime = _spawnTime;
+        }
+    }
 
     [Serializable]
     public class PointJSON
@@ -294,23 +314,7 @@ public class NetworkManager : MonoBehaviour
         public float[] rotation;
         public string unitType;
         public int unitId;
-
-        public UnitJSON(Vector3 _position, Quaternion _rotation, string _unitType)
-        {
-            position = new float[] {
-                _position.x,
-                _position.y,
-                _position.z
-            };
-
-            rotation = new float[] {
-                _rotation.eulerAngles.x,
-                _rotation.eulerAngles.y,
-                _rotation.eulerAngles.z
-            };
-
-            unitType = _unitType;
-        }
+        public int spawnTime;
 
         public static UnitJSON CreateFromJSON(string data)
         {
