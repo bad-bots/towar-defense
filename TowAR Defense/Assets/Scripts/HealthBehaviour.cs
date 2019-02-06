@@ -5,48 +5,44 @@ using UnityEngine.UI;
 
 public class HealthBehaviour : MonoBehaviour
 {
-    public float health;
-    public float maxHealth;
-    public GameObject healthBarPrefab;
-    public bool alwaysShowHealth = false;
+  public float health;
+  public float maxHealth;
+  public GameObject healthBarPrefab;
+  public bool alwaysShowHealth = false;
 
-    private Slider m_healthBar;
-    private float lastHealth = 0;
+  private Slider m_healthBar;
+  private float lastHealth = 0;
 
-    // Start is called before the first frame update
-    void Start()
+  // Start is called before the first frame update
+  void Start()
+  {
+    var healthCanvas = Instantiate(healthBarPrefab, transform);
+    m_healthBar = healthCanvas.GetComponentInChildren<Slider>();
+    CheckShowHealthBar();
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    if (health != lastHealth)
     {
-        var healthCanvas = Instantiate(healthBarPrefab, transform);
-        m_healthBar = healthCanvas.GetComponentInChildren<Slider>();
-        CheckShowHealthBar();
+      m_healthBar.value = health;
+      m_healthBar.maxValue = maxHealth;
+      CheckShowHealthBar();
     }
+  }
 
-    // Update is called once per frame
-    void Update()
+  private void CheckShowHealthBar()
+  {
+    if (alwaysShowHealth) return;
+
+    if (health != maxHealth)
     {
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-        else if (health != lastHealth)
-        {
-            m_healthBar.value = health;
-            m_healthBar.maxValue = maxHealth;
-            CheckShowHealthBar();
-        }
+      m_healthBar.gameObject.SetActive(true);
     }
-
-    private void CheckShowHealthBar()
+    else
     {
-        if (alwaysShowHealth) return;
-
-        if (health != maxHealth)
-        {
-            m_healthBar.gameObject.SetActive(true);
-        }
-        else
-        {
-            m_healthBar.gameObject.SetActive(false);
-        }
+      m_healthBar.gameObject.SetActive(false);
     }
+  }
 }

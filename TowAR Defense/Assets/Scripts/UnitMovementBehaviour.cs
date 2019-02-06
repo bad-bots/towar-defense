@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitMovementBehaviour : MonoBehaviour
 {
     public Transform target;
-
+    Animator m_Animator;
     private float distanceThreshold;
     private UnitData unitData;
 
@@ -17,21 +17,27 @@ public class UnitMovementBehaviour : MonoBehaviour
     {
         unitData = GetComponent<UnitData>();
         distanceThreshold = Mathf.Pow(unitData.type.attackRange, 2);
-
+        m_Animator = gameObject.GetComponent<Animator>();
         isAttackingPlayer = (GameController.instance.isPlayer1 ? 1 : 2) == unitData.playerNo;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (target != null)
+        if (target != null && unitData.currentHealth > 0)
         {
             transform.LookAt(target);
             bool isInRange = (transform.localPosition - target.localPosition).sqrMagnitude < distanceThreshold;
             if (target.CompareTag("Tower") || !isInRange)
+            {
                 transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
+                m_Animator.SetBool("Moving", true);
+            }
             else
+            {
+                m_Animator.SetBool("Moving", false);
                 TryAttackUnit(target.GetComponent<UnitData>());
+            }
         }
     }
 
@@ -58,7 +64,6 @@ public class UnitMovementBehaviour : MonoBehaviour
             {
                 NetworkManager.instance.CommandTakeTowerDamage(unitType, attackedPlayer);
             }
-
             Destroy(gameObject);
             return true;
         }
@@ -69,6 +74,7 @@ public class UnitMovementBehaviour : MonoBehaviour
     {
         if (Time.time > nextAttackTime)
         {
+            m_Animator.SetTrigger("Attack1Trigger");
             nextAttackTime = Time.time + (1.0f / unitData.type.attackSpeed);
             if (isAttackingPlayer) GameController.instance.RequestUnitDamage(unitData.unitId, unit.unitId);
         }

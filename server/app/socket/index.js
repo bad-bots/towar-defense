@@ -211,8 +211,8 @@ module.exports = io => {
       if (attackedPlayer.castleHealth <= 0) {
         const winningPlayer = 3 - attackedPlayerNo;
         io.to(gameRoom.roomId).emit("endGame", { winningPlayer });
-
-        if (gameRoom.roomName === "debug") {
+        clearInterval(gameRoom.interval)
+        if (gameRoom.roomName === 'debug') {
           gameState.resetDebugRoom();
         } // else persist to db/delete game room
         else {
