@@ -1,6 +1,6 @@
 #!/bin/bash
 docker run \
-	-p "80:8080" \
+	-p "4574:8080" \
 	-w "/usr/src/app" \
 	--env-file "./.env.production" \
 	--name "towar-defense" \
