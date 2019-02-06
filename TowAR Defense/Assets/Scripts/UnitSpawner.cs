@@ -50,23 +50,23 @@ public class UnitSpawner : MonoBehaviour
 
     #region Public Methods
 
-    public void SpawnUnit(string unitTypeName, Vector3 position, Quaternion rotation, bool isPlayer1, int unitId = 0)
+    public void SpawnUnit(NetworkManager.UnitSpawnData spawnData)
     {
         Debug.Log("Spawning");
         UnitType unitType = null;
-        if (m_unitTypes.TryGetValue(unitTypeName, out unitType))
+        if (m_unitTypes.TryGetValue(spawnData.unitType, out unitType))
         {
             var spawnedUnit = Instantiate(unitType.unitPrefab, m_gameBoard) as GameObject;
-            spawnedUnit.transform.localPosition = position;
-            spawnedUnit.transform.localRotation = rotation;
+            spawnedUnit.transform.localPosition = spawnData.position;
+            spawnedUnit.transform.localRotation = spawnData.rotation;
             spawnedUnit.tag = "Unit";
             var unitData = spawnedUnit.GetComponent<UnitData>();
             unitData.type = unitType;
-            unitData.playerNo = isPlayer1 ? 1 : 2;
-            unitData.unitId = unitId;
+            unitData.playerNo = spawnData.playerNo;
+            unitData.unitId = spawnData.unitId;
 
             // Add to list of created units
-            (isPlayer1 ? m_p1_units : m_p2_units).Add(unitData);
+            (spawnData.playerNo == 1 ? m_p1_units : m_p2_units).Add(unitData);
         }
         else
         {
