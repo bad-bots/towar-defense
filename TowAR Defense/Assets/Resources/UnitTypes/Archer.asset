@@ -11,8 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a285470922200014a8009b4a8c54065e, type: 3}
   m_Name: Archer
-  m_EditorClassIdentifier:
-  unitPrefab: {fileID: 1928244954057134, guid: 4efdc095f88074e53a4f28617077b108, type: 3}
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 100000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
   speed: 1.2
   maxHealth: 200
   attackRange: 2.5
