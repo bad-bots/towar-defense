@@ -23,7 +23,6 @@ public class GameEndBehavior : MonoBehaviour
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnSceneLoad;
-        var mainPage = GameObject.FindGameObjectWithTag("MainPage");
-        mainPage.SetActive(false);
+        PageController.instance.SwitchPage("EndGamePage");
     }
 }

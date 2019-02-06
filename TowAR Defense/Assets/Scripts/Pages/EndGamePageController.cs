@@ -5,26 +5,17 @@ using UnityEngine.UI;
 
 public class EndGamePageController : MonoBehaviour
 {
-    public SceneField gameScene;
+    public Text winningText;
 
     void Start()
     {
-        Debug.Log(PersistantStats.winningPlayer);
-        if(PersistantStats.winningPlayer == 1 || PersistantStats.winningPlayer == 2)
-        {
-            var textBoxG = GameObject.FindGameObjectWithTag("Winner");
-            Debug.Log(textBoxG);
-            var textBox = textBoxG.GetComponent<Text>();
-            Debug.Log(textBox);
-            textBox.text = "Player " + PersistantStats.winningPlayer +" wins";
-        } else {
-            gameObject.SetActive(false);
-        }
+        // NetworkManager.instance.UpdateGameStateEvent += OnWinningPlayerChange;
+        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
     }
 
-    void Update()
+    void OnWinningPlayerChange()
     {
-
+        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
     }
 
     public void PlayAgain()
@@ -36,6 +27,16 @@ public class EndGamePageController : MonoBehaviour
     {
         // Leave Room on server and switch to the main page
         NetworkManager.instance.CommandLeaveRoom();
-        GetComponent<PageSwitcher>().SwitchPage();
+        PageController.instance.SwitchPage("MainPage");
+    }
+
+    void OnDisable()
+    {
+        UnWatchEvents();
+    }
+
+    void UnWatchEvents()
+    {
+        // NetworkManager.instance.UpdateGameStateEvent -= OnWinningPlayerChange;
     }
 }

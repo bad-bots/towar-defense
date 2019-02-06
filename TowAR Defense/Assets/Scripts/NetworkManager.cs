@@ -31,6 +31,7 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Socket Events
+    public event Action<string> InitRoomEvent;
     public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
     public event Action<UpdateDoubloons> UpdateDoubloonsEvents;
     public event Action<UnitSpawnData> SpawnUnitEvent;
@@ -38,6 +39,11 @@ public class NetworkManager : MonoBehaviour
     public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
     public event Action<WinningPlayer> EndGameEvent;
+    
+    // Notifies all listeners that a game state has changed
+    // This prevents classes from using Update to fetch game state
+    // on every scene
+    public event Action UpdateGameStateEvent;
 
     #endregion
 
@@ -61,6 +67,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("connect", OnConnect);
         socket.On("disconnect", OnDisconnect);
 
+        socket.On("init", HandleInit);
         socket.On("spawn", HandleSpawnUnit);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
@@ -96,10 +103,16 @@ public class NetworkManager : MonoBehaviour
         m_isConnected = false;
     }
 
+    public void HandleInit(SocketIOEvent obj)
+    {
+        string joinToken = JoinToken.CreateFromJSON(obj.data.ToString()).joinToken;
+        InitRoomEvent(joinToken);
+        UpdateGameStateEvent();
+    }
+
     private void HandleSpawnUnit(SocketIOEvent obj)
     {
         string data = obj.data.ToString();
-        Debug.Log(data);
         var json = UnitJSON.CreateFromJSON(data);
         var isPlayer1 = json.playerNo == 1;
         var unitType = json.unitType != null ?
@@ -164,6 +177,10 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("join", JSONObject.CreateStringObject(roomCode));
     }
 
+    public void CommandLeaveRoom()
+    {
+        socket.Emit("leave");
+    }
     public void CommandSpawn(string unitType)
     {
         this.socket.Emit("spawn", JSONObject.CreateStringObject(unitType.ToLower()));
@@ -188,10 +205,6 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("damageUnit", new JSONObject(data));
     }
 
-    public void CommandLeaveRoom()
-    {
-        socket.Emit("leave");
-    }
     #endregion
 
     #region Command Acknowledgments
@@ -200,8 +213,8 @@ public class NetworkManager : MonoBehaviour
     {
         m_createRoomAcks(obj.list[0].str);
         m_createRoomAcks = null;
+        UpdateGameStateEvent();
     }
-
     #endregion
 
     #region JSON Message Classes
@@ -265,6 +278,16 @@ public class NetworkManager : MonoBehaviour
         public static TowerDamageJSON CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<TowerDamageJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class JoinToken
+    {
+        public string joinToken;
+        public static JoinToken CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<JoinToken>(data);
         }
     }
 
