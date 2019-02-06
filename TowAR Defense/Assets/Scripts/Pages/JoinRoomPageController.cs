@@ -16,6 +16,7 @@ public class JoinRoomPageController : MonoBehaviour
     public void HandleClick()
     {
         string roomCode = roomCodeInput.text;
+        PersistantStats.joinToken = roomCode;
         NetworkManager.instance.CommandJoinRoom(roomCode);
     }
 

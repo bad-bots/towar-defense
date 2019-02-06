@@ -21,6 +21,7 @@ public class CreateRoomPageController : MonoBehaviour
     private void OnRoomCreated(string joinToken)
     {
         statusMessageText.text = "Created Room!\nGive this code to your buddy!";
+        PersistantStats.joinToken = joinToken;
         roomCodeText.text = joinToken;
         roomCodeText.gameObject.SetActive(true);
         roomNameInput.interactable = false;

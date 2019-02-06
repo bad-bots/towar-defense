@@ -23,6 +23,8 @@ public class NetworkManager : MonoBehaviour
     public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
     public event Action IncorrectRoomCodeEvent;
+    public event Action<WinningPlayer> EndGameEvent;
+
     #endregion
 
     #region MONOBEHAVIOUR_METHODS
@@ -46,6 +48,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
+        socket.On("endGame", HandleEndGame);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -94,6 +97,12 @@ public class NetworkManager : MonoBehaviour
         UpdateCastleHealth(attackedPlayer);
     }
 
+    private void HandleEndGame(SocketIOEvent obj)
+    {
+        var winningPlayer = WinningPlayer.CreateFromJSON(obj.data.ToString());
+        EndGameEvent(winningPlayer);
+    }
+
     #endregion
 
     #region Commands
@@ -124,6 +133,16 @@ public class NetworkManager : MonoBehaviour
     {
         string data = JsonUtility.ToJson(new TowerDamageJSON(unitType, attackedPlayerNo));
         this.socket.Emit("damageCastle", new JSONObject(data));
+    }
+
+    public void CommandLeaveRoom()
+    {
+        socket.Emit("leave");
+    }
+
+    public void CommandRestartGame()
+    {
+        socket.Emit("restart");
     }
 
     #endregion
@@ -191,6 +210,17 @@ public class NetworkManager : MonoBehaviour
         public static AttackedPlayerHealth CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<AttackedPlayerHealth>(data);
+        }
+    }
+
+    [Serializable]
+    public class WinningPlayer
+    {
+        public int winningPlayer;
+
+        public static WinningPlayer CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<WinningPlayer>(data);
         }
     }
 

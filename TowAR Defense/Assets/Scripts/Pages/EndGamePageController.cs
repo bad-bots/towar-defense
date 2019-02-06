@@ -1,27 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EndGamePageController : MonoBehaviour
 {
-    // public SceneField gameScene;
+    public SceneField gameScene;
 
-    // void Start()
-    // {
-    //     NetworkManager.instance.DisplayEndGameEvent += OnGameEnd;
-    // }
+    void Start()
+    {
+        Debug.Log(PersistantStats.winningPlayer);
+        if(PersistantStats.winningPlayer == 1 || PersistantStats.winningPlayer == 2)
+        {
+            var textBoxG = GameObject.FindGameObjectWithTag("Winner");
+            Debug.Log(textBoxG);
+            var textBox = textBoxG.GetComponent<Text>();
+            Debug.Log(textBox);
+            textBox.text = "Player " + PersistantStats.winningPlayer +" wins";
+        } else {
+            gameObject.SetActive(false);
+        }
+    }
 
-    // void OnGameEnd(string winner)
-    // {
-    //     SceneManager.sceneLoaded += OnSceneLoad;
-    //     UnityEngine.SceneManagement.SceneManager.LoadScene(gameScene);
-    //     GetComponentInChildren<Text>().text = winner + " Wins";
-    // }
+    void Update()
+    {
 
-    // private void OnSceneLoad(Scene scene, LoadSceneMode mode)
-    // {
-    //     SceneManager.sceneLoaded -= OnSceneLoad;
-    //     var gameCon = GameObject.FindGameObjectWithTag("GameController")
-    //           .GetComponent<GameController>();
-    // }
+    }
+
+    public void PlayAgain()
+    {
+        NetworkManager.instance.CommandRestartGame();
+        NetworkManager.instance.CommandJoinRoom(PersistantStats.joinToken);
+    }
+
+    public void ReturnToMain()
+    {
+        // Leave Room on server and switch to the main page
+        NetworkManager.instance.CommandLeaveRoom();
+        GetComponent<PageSwitcher>().SwitchPage();
+    }
 }

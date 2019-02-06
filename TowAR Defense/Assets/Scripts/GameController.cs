@@ -80,6 +80,11 @@ public class GameController : MonoBehaviour
         m_initalized = true;
     }
 
+    public void UnInitialize()
+    {
+        m_initalized = false;
+    }
+
     public void RequestSpawnUnit(string unitType)
     {
         CheckInitialized();
