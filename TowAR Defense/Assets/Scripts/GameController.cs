@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(UnitSpawner))]
 public class GameController : MonoBehaviour
 {
-    #region Public Members
+    #region Public Properties
     public bool isPlayer1
     {
         get
@@ -13,10 +14,24 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public bool isInitialized
+    {
+        get
+        {
+            return m_initalized;
+        }
+    }
+    #endregion
+
+    #region Public Members
+
     public float doubloons;
     // [HideInInspector]
     public int castleHealth;
     public int enemyCastleHealth;
+
+    [HideInInspector]
+    public UnitSpawner unitSpawner;
     #endregion
 
     #region Private Members
@@ -24,11 +39,6 @@ public class GameController : MonoBehaviour
     private bool m_initalized = false;
     private bool m_isPlayer1;
 
-    // internal data
-    private Dictionary<string, UnitType> m_unitTypes = new Dictionary<string, UnitType>();
-    private List<UnitData> m_allies = new List<UnitData>();
-    private List<UnitData> m_enemies = new List<UnitData>();
-    private Transform gameBoard;
     #endregion
 
     public static GameController instance = null;
@@ -51,20 +61,14 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        // Find all Unit Types
-        var unitTypes = new List<UnitType>(Resources.LoadAll<UnitType>(""));
-        foreach (var type in unitTypes)
-        {
-            Debug.Log("Found Unit Type: " + type.name);
-            m_unitTypes.Add(type.name, type);
-        }
-        Debug.Log("Found " + unitTypes.Count + " unit types");
-
-        gameBoard = GameObject.FindGameObjectWithTag("Game Board").transform;
+        unitSpawner = GetComponent<UnitSpawner>();
 
         // Register network handlers
         NetworkManager.instance.SpawnUnitEvent += OnUnitSpawn;
-        NetworkManager.instance.UpdateCastleHealth += updateCastleHealth;
+        NetworkManager.instance.UpdateCastleHealthEvent += UpdateCastleHealth;
+        NetworkManager.instance.UpdateUnitHealthEvent += UpdateUnitHealth;
+        NetworkManager.instance.UpdateDoubloonsEvents += updateDoubloons;
+
     }
 
     #endregion
@@ -105,32 +109,31 @@ public class GameController : MonoBehaviour
         NetworkManager.instance.CommandTakeTowerDamage(unitType, attackedPlayer);
     }
 
+    public void RequestUnitDamage(int attackerId, int defenderId)
+    {
+        CheckInitialized();
+        NetworkManager.instance.CommandTakeUnitDamage(attackerId, defenderId);
+    }
+
     #endregion
 
     #region Event Handlers
 
-    private void OnUnitSpawn(string unitTypeName, Vector3 position, Quaternion rotation, bool _isPlayer1)
+    private void OnUnitSpawn(NetworkManager.UnitSpawnData spawnData)
     {
+        Debug.Log("Spawning unit from controller");
         CheckInitialized();
-        Debug.Log("Spawning");
-        UnitType unitType = null;
-        if (m_unitTypes.TryGetValue(unitTypeName, out unitType))
-        {
-            var spawnedUnit = Instantiate(unitType.unitPrefab, gameBoard) as GameObject;
-            spawnedUnit.transform.localPosition = position;
-            spawnedUnit.transform.localRotation = rotation;
-            spawnedUnit.tag = _isPlayer1 ? "Player1" : "Player2";
-            var unitData = spawnedUnit.GetComponent<UnitData>();
-            unitData.type = unitType;
-            unitData.playerNo = _isPlayer1 ? 1 : 2;
-        }
-        else
-        {
-            Debug.LogWarning("Unit Type has no prefab attached");
-        }
+        Debug.Log("passed init");
+        unitSpawner.SpawnUnit(spawnData);
     }
 
-    void updateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
+    // Update Doubloons
+    void updateDoubloons(NetworkManager.UpdateDoubloons playerData)
+    {
+        doubloons = playerData.doubloons;
+    }
+
+    private void UpdateCastleHealth(NetworkManager.AttackedPlayerHealth attackedPlayerHealth)
     {
         if (attackedPlayerHealth.playerNo == 1 && isPlayer1)
         {
@@ -149,13 +152,28 @@ public class GameController : MonoBehaviour
             castleHealth = attackedPlayerHealth.castleHealth;
         }
     }
+
+    private void UpdateUnitHealth(NetworkManager.UnitHealthJSON unitHealthJSON)
+    {
+        var allUnits = unitHealthJSON.playerNo == 1 ? unitSpawner.p1_units : unitSpawner.p2_units;
+        foreach (var unit in allUnits)
+        {
+            if (unit.unitId == unitHealthJSON.unitId)
+            {
+                unit.currentHealth = unitHealthJSON.health;
+            }
+        }
+    }
     #endregion
 
     #region Private Methods
     private void CheckInitialized()
     {
         if (!m_initalized)
+        {
+            Debug.LogError("Failed to initialized game controller");
             throw new System.InvalidOperationException("Attempted to use GameController before initializing");
+        }
     }
     #endregion
 }

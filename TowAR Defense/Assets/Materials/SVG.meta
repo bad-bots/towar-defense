@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:TowAR Defense/Assets/Materials/SVG.meta
 guid: 3828314c427a0ed4f8049c7f7babc391
 folderAsset: yes
+=======
+guid: 30eeb26faff4e44db9d23fb75920b9d6
+>>>>>>> 39d0250774ceb94ea157928e247ae97173643886:TowAR Defense/Assets/SocketIO/WebsocketSharp/websocket-sharp.csproj.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

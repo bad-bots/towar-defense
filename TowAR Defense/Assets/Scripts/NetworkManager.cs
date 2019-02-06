@@ -9,19 +9,33 @@ public class NetworkManager : MonoBehaviour
     #region Public Members
     public static NetworkManager instance = null;
     public Action onSpawnKnight = null;
+    #endregion
 
+    #region Public Properties
+    public bool isConnected
+    {
+        get
+        {
+            return m_isConnected;
+        }
+    }
     #endregion
 
     #region Private Members
     private SocketIOComponent socket;
 
     private Action<string> m_createRoomAcks;
+
+    private bool autoJoinDebug = false;
+    private bool m_isConnected = false;
     #endregion
 
     #region Socket Events
-    public event Action<AttackedPlayerHealth> UpdateCastleHealth;
-    public event Action<string, Vector3, Quaternion, bool> SpawnUnitEvent;
+    public event Action<AttackedPlayerHealth> UpdateCastleHealthEvent;
+    public event Action<UpdateDoubloons> UpdateDoubloonsEvents;
+    public event Action<UnitSpawnData> SpawnUnitEvent;
     public event Action<PlayerJSON> StartGameEvent;
+    public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
     public event Action<WinningPlayer> EndGameEvent;
 
@@ -44,16 +58,21 @@ public class NetworkManager : MonoBehaviour
     {
         this.socket = this.GetComponent<SocketIOComponent>();
 
+        socket.On("connect", OnConnect);
+        socket.On("disconnect", OnDisconnect);
+
         socket.On("spawn", HandleSpawnUnit);
         socket.On("incorrectGameToken", HandleIncorrectRoomCode);
         socket.On("start", HandleStartGame);
         socket.On("damageCastle", HandleDamageCastle);
+        socket.On("damageUnit", HandleUpdateUnitHealth);
+        socket.On("updatePlayerDoubloons", HandleUpdateDoubloons);
         socket.On("endGame", HandleEndGame);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
             Debug.LogWarning("Started Game in Game Scene. Joining debug room");
-            StartCoroutine(JoinDebugRoom());
+            autoJoinDebug = true;
         }
     }
 
@@ -61,29 +80,44 @@ public class NetworkManager : MonoBehaviour
 
     #region Event Handlers
 
-    private IEnumerator JoinDebugRoom()
+    private void OnConnect(SocketIOEvent obj)
     {
-        yield return new WaitForEndOfFrame();
-        CommandJoinRoom("debug");
+        m_isConnected = true;
+        Debug.Log("Connected to server");
+        if (autoJoinDebug)
+        {
+            Debug.Log("Joining debug room");
+            CommandJoinRoom("debugAI");
+        }
+    }
+
+    private void OnDisconnect(SocketIOEvent obj)
+    {
+        m_isConnected = false;
     }
 
     private void HandleSpawnUnit(SocketIOEvent obj)
     {
         string data = obj.data.ToString();
+        Debug.Log(data);
         var json = UnitJSON.CreateFromJSON(data);
-        var pos = new Vector3(json.position[0], json.position[1], json.position[2]);
-        var rot = Quaternion.Euler(json.rotation[0], json.rotation[1], json.rotation[2]);
         var isPlayer1 = json.playerNo == 1;
         var unitType = json.unitType != null ?
              json.unitType[0].ToString().ToUpper() + json.unitType.Substring(1) :
              "Knight";
-        SpawnUnitEvent(unitType, pos, rot, isPlayer1);
+        var spawnData = new UnitSpawnData(json.playerNo, json.position, json.rotation,
+            unitType, json.unitId, json.spawnTime);
+        SpawnUnitEvent(spawnData);
     }
 
     private void HandleStartGame(SocketIOEvent obj)
     {
+        Debug.Log("Received game start");
         var playerData = PlayerJSON.CreateFromJSON(obj.data.ToString());
-        StartGameEvent(playerData);
+        if (autoJoinDebug)
+            GameController.instance.Initialize(playerData);
+        else
+            StartGameEvent(playerData);
     }
 
     private void HandleIncorrectRoomCode(SocketIOEvent obj)
@@ -94,7 +128,19 @@ public class NetworkManager : MonoBehaviour
     private void HandleDamageCastle(SocketIOEvent obj)
     {
         var attackedPlayer = AttackedPlayerHealth.CreateFromJSON(obj.data.ToString());
-        UpdateCastleHealth(attackedPlayer);
+        UpdateCastleHealthEvent(attackedPlayer);
+    }
+
+    private void HandleUpdateUnitHealth(SocketIOEvent obj)
+    {
+        var unitHealthJSON = UnitHealthJSON.CreateFromJSON(obj.data.ToString());
+        UpdateUnitHealthEvent(unitHealthJSON);
+    }
+
+    private void HandleUpdateDoubloons(SocketIOEvent obj)
+    {
+        var newDoubloons = UpdateDoubloons.CreateFromJSON(obj.data.ToString());
+        UpdateDoubloonsEvents(newDoubloons);
     }
 
     private void HandleEndGame(SocketIOEvent obj)
@@ -135,16 +181,17 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("damageCastle", new JSONObject(data));
     }
 
+    public void CommandTakeUnitDamage(int attackerId, int defenderId)
+    {
+        string data = JsonUtility.ToJson(new UnitDamageJSON(attackerId, defenderId));
+        Debug.Log("Sending data: " + data);
+        this.socket.Emit("damageUnit", new JSONObject(data));
+    }
+
     public void CommandLeaveRoom()
     {
         socket.Emit("leave");
     }
-
-    public void CommandRestartGame()
-    {
-        socket.Emit("restart");
-    }
-
     #endregion
 
     #region Command Acknowledgments
@@ -158,6 +205,26 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region JSON Message Classes
+
+    public class UnitSpawnData
+    {
+        public int playerNo;
+        public Vector3 position;
+        public Quaternion rotation;
+        public string unitType;
+        public int unitId;
+        public int spawnTime;
+
+        public UnitSpawnData(int _playerNo, float[] _position, float[] _rotation, string _unitType, int _unitId, int _spawnTime)
+        {
+            playerNo = _playerNo;
+            position = new Vector3(_position[0], _position[1], _position[2]);
+            rotation = Quaternion.Euler(_rotation[0], _rotation[1], _rotation[2]);
+            unitType = _unitType;
+            unitId = _unitId;
+            spawnTime = _spawnTime;
+        }
+    }
 
     [Serializable]
     public class PointJSON
@@ -214,6 +281,19 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
+    public class UnitDamageJSON
+    {
+        public int attackerId;
+        public int defenderId;
+
+        public UnitDamageJSON(int _attackerId, int _defenderId)
+        {
+            attackerId = _attackerId;
+            defenderId = _defenderId;
+        }
+    }
+    
+    [Serializable]
     public class WinningPlayer
     {
         public int winningPlayer;
@@ -221,6 +301,31 @@ public class NetworkManager : MonoBehaviour
         public static WinningPlayer CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<WinningPlayer>(data);
+        }
+    }
+
+    [Serializable]
+    public class UnitHealthJSON
+    {
+        public int playerNo;
+        public int unitId;
+        public float health;
+
+        public static UnitHealthJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UnitHealthJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class UpdateDoubloons
+    {
+        public int playerNo;
+        public int doubloons;
+
+        public static UpdateDoubloons CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UpdateDoubloons>(data);
         }
     }
 
@@ -232,23 +337,8 @@ public class NetworkManager : MonoBehaviour
         public float[] position;
         public float[] rotation;
         public string unitType;
-
-        public UnitJSON(Vector3 _position, Quaternion _rotation, string _unitType)
-        {
-            position = new float[] {
-                _position.x,
-                _position.y,
-                _position.z
-            };
-
-            rotation = new float[] {
-                _rotation.eulerAngles.x,
-                _rotation.eulerAngles.y,
-                _rotation.eulerAngles.z
-            };
-
-            unitType = _unitType;
-        }
+        public int unitId;
+        public int spawnTime;
 
         public static UnitJSON CreateFromJSON(string data)
         {

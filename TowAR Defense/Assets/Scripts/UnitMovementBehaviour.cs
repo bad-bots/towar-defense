@@ -10,17 +10,41 @@ public class UnitMovementBehaviour : MonoBehaviour
     private float distanceThreshold;
     private UnitData unitData;
 
+    private float nextAttackTime = 0f;
+    private bool isAttackingPlayer = false;
+
     void Start()
     {
         unitData = GetComponent<UnitData>();
         distanceThreshold = Mathf.Pow(unitData.type.attackRange, 2);
+
+        isAttackingPlayer = (GameController.instance.isPlayer1 ? 1 : 2) == unitData.playerNo;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // Update is called once per frame
+    void Update()
+    {
+        if (target != null)
+        {
+            transform.LookAt(target);
+            bool isInRange = (transform.localPosition - target.localPosition).sqrMagnitude < distanceThreshold;
+            if (target.CompareTag("Tower") || !isInRange)
+                transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
+            else
+                TryAttackUnit(target.GetComponent<UnitData>());
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform != target) return;
+        if (CheckTowerCollision(collision)) return;
+    }
+
+    private bool CheckTowerCollision(Collision collision)
     {
         string towerName = "Tower" + (unitData.enemyPlayerNo);
-        Debug.Log("Enemy Tower: " + towerName);
-        if (collision.gameObject.transform == target && collision.gameObject.CompareTag("Tower"))
+        if (collision.gameObject.CompareTag("Tower"))
         {
             int attackedPlayer = collision.gameObject.name == "Tower1" ? 1 : 2;
 
@@ -36,14 +60,18 @@ public class UnitMovementBehaviour : MonoBehaviour
             }
 
             Destroy(gameObject);
+            return true;
+        }
+        return false;
+    }
+
+    private void TryAttackUnit(UnitData unit)
+    {
+        if (Time.time > nextAttackTime)
+        {
+            nextAttackTime = Time.time + (1.0f / unitData.type.attackSpeed);
+            if (isAttackingPlayer) GameController.instance.RequestUnitDamage(unitData.unitId, unit.unitId);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.LookAt(target);
-        if ((transform.localPosition - target.localPosition).sqrMagnitude > distanceThreshold)
-            transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
-    }
 }
