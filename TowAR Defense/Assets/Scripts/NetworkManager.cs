@@ -37,6 +37,8 @@ public class NetworkManager : MonoBehaviour
     public event Action<PlayerJSON> StartGameEvent;
     public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
+    public event Action<WinningPlayer> EndGameEvent;
+
     #endregion
 
     #region MONOBEHAVIOUR_METHODS
@@ -65,6 +67,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("damageCastle", HandleDamageCastle);
         socket.On("damageUnit", HandleUpdateUnitHealth);
         socket.On("updatePlayerDoubloons", HandleUpdateDoubloons);
+        socket.On("endGame", HandleEndGame);
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -140,6 +143,12 @@ public class NetworkManager : MonoBehaviour
         UpdateDoubloonsEvents(newDoubloons);
     }
 
+    private void HandleEndGame(SocketIOEvent obj)
+    {
+        var winningPlayer = WinningPlayer.CreateFromJSON(obj.data.ToString());
+        EndGameEvent(winningPlayer);
+    }
+
     #endregion
 
     #region Commands
@@ -179,6 +188,10 @@ public class NetworkManager : MonoBehaviour
         this.socket.Emit("damageUnit", new JSONObject(data));
     }
 
+    public void CommandLeaveRoom()
+    {
+        socket.Emit("leave");
+    }
     #endregion
 
     #region Command Acknowledgments
@@ -277,6 +290,17 @@ public class NetworkManager : MonoBehaviour
         {
             attackerId = _attackerId;
             defenderId = _defenderId;
+        }
+    }
+    
+    [Serializable]
+    public class WinningPlayer
+    {
+        public int winningPlayer;
+
+        public static WinningPlayer CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<WinningPlayer>(data);
         }
     }
 

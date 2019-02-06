@@ -10,6 +10,9 @@ TagManager:
   - Player2
   - Ground
   - Game Board
+  - MainPage
+  - Winner
+  - EndGamePage
   layers:
   - Default
   - TransparentFX
