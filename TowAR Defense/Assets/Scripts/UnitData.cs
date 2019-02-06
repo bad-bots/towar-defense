@@ -26,6 +26,7 @@ public class UnitData : MonoBehaviour
 
         m_healthBehaviour = GetComponent<HealthBehaviour>();
         m_healthBehaviour.maxHealth = type.maxHealth;
+        m_healthBehaviour.health = type.maxHealth;
     }
 
     void Update()
