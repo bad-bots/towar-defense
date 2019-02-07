@@ -23,6 +23,7 @@ public class NetworkManager : MonoBehaviour
 
     #region Private Members
     private SocketIOComponent socket;
+    private SceneSwitcher switcher;
 
     private Action<string> m_createRoomAcks;
 
@@ -39,7 +40,7 @@ public class NetworkManager : MonoBehaviour
     public event Action<UnitHealthJSON> UpdateUnitHealthEvent;
     public event Action IncorrectRoomCodeEvent;
     public event Action<WinningPlayer> EndGameEvent;
-    
+
     // Notifies all listeners that a game state has changed
     // This prevents classes from using Update to fetch game state
     // on every scene
@@ -62,6 +63,7 @@ public class NetworkManager : MonoBehaviour
 
     private void Start()
     {
+        this.switcher = this.GetComponent<SceneSwitcher>();
         this.socket = this.GetComponent<SocketIOComponent>();
 
         socket.On("connect", OnConnect);
@@ -91,6 +93,7 @@ public class NetworkManager : MonoBehaviour
     {
         m_isConnected = true;
         Debug.Log("Connected to server");
+        if (switcher != null) switcher.SwitchScene();
         if (autoJoinDebug)
         {
             Debug.Log("Joining debug room");
@@ -315,7 +318,7 @@ public class NetworkManager : MonoBehaviour
             defenderId = _defenderId;
         }
     }
-    
+
     [Serializable]
     public class WinningPlayer
     {
