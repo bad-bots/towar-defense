@@ -13,8 +13,6 @@ public class FaceCameraBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (currentCamera == null)
-            currentCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
         UpdateRotation();
     }
@@ -22,6 +20,8 @@ public class FaceCameraBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentCamera == null)
+            currentCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
         if (tracking) UpdateRotation();
     }
 
