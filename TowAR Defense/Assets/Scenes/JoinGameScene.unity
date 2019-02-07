@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3596,11 +3596,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3953003761406853727, guid: 8a6a56c1694ccea4788970d7ccc3ec91,
-        type: 3}
-      propertyPath: url
-      value: ws://127.0.0.1:8080/socket.io/?EIO=4&transport=websocket
-      objectReference: {fileID: 0}
     - target: {fileID: 7123195827557003246, guid: 8a6a56c1694ccea4788970d7ccc3ec91,
         type: 3}
       propertyPath: gameScene.m_SceneAsset
@@ -3665,9 +3660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5aa8afc4d03f84a9f3baf83107d25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameScene:
-    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
-    m_SceneName: GameScene
+  winningText: {fileID: 0}
 --- !u!114 &1299017501
 MonoBehaviour:
   m_ObjectHideFlags: 0
