@@ -130,8 +130,8 @@ class MemDB {
     return this.Player.insert({
       socketId,
       playerNo,
-      castleHealth: 100,
-      doubloons: 500,
+      castleHealth: 1000,
+      doubloons: 1000,
       phonePosition,
       coolDowns: {
         knight: 0
@@ -181,9 +181,9 @@ class MemDB {
       case "archer":
         return 100;
       case "knight":
-        return 150;
+        return 100;
       case "phallanx":
-        return 200;
+        return 100;
       default:
         return 100;
     }
@@ -192,19 +192,33 @@ class MemDB {
   unitDamage(type) {
     switch (type) {
       case "archer":
-        return 100;
+        return 145;
       case "knight":
-        return 150;
+        return 115;
       case "phallanx":
-        return 200;
+        return 80;
       default:
         return 100;
     }
   }
 
+  unitHealth(type) {
+    switch (type) {
+      case "archer":
+        return 325;
+      case "knight":
+        return 600;
+      case "phallanx":
+        return 800;
+      default:
+        return 600;
+    }
+  }
+
   createUnit(playerNo, unitType, position, rotation) {
+    let health = this.unitHealth(unitType)
     return this.Unit.insert({
-      health: 200,
+      health,
       position,
       rotation,
       unitType,

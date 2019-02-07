@@ -9,14 +9,12 @@ public class UIController : MonoBehaviour
 
     public Button[] spawnUnitButtonsType;
     public Button spawnUnitButton;
+    public float cooldown = .5f;
     void Awake()
     {
         spawnUnitButtonsType = GetComponentsInChildren<Button>();
     }
-    public void SpawnKnight()
-    {
-        GameController.instance.RequestSpawnUnit("Knight");
-    }
+  
     public void SpawnUnit(string unitType)
     {
         //Do something
@@ -26,7 +24,7 @@ public class UIController : MonoBehaviour
             if((button.name.StartsWith("spawn" + unitType, true, System.Globalization.CultureInfo.CurrentCulture)) || (button.name.StartsWith("ATTACK" + unitType, true, System.Globalization.CultureInfo.CurrentCulture)))
             {
                 button.interactable = false;
-                StartCoroutine(ResetCooldown(2.0f, button));
+                StartCoroutine(ResetCooldown(cooldown, button));
             };
         }
 

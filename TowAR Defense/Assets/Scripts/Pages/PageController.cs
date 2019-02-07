@@ -17,6 +17,7 @@ public class PageController : MonoBehaviour
     public GameObject GamePendingPage;
     public GameObject PauseGamePage;
     public GameObject EndGamePage;
+    public GameObject StartupPage;
 
     // Hash containing pages for easy lookup in the OverrideDefault Method
     private Dictionary<string,GameObject> Pages = new Dictionary<string, GameObject>();
@@ -39,9 +40,11 @@ public class PageController : MonoBehaviour
         Pages.Add("GamePendingPage", GamePendingPage);
         Pages.Add("PauseGamePage", PauseGamePage);
         Pages.Add("EndGamePage", EndGamePage);
+        Pages.Add("StartupPage", StartupPage);
 
-        DisplayedPage = MainPage;
-        DisplayedPageName = "MainPage";
+
+        DisplayedPage = StartupPage;
+        DisplayedPageName = "StartupPage";
         DisplayedPage.SetActive(true);
 
         foreach(var Page in Pages)
@@ -78,10 +81,16 @@ public class PageController : MonoBehaviour
     }
 
     // Switch handles
+    public void HandleSwitchToStartupPage()    
+    {
+        SwitchPage("StartupPage");
+    }
+
     public void HandleSwitchToMainPage()    
     {
         SwitchPage("MainPage");
     }
+
     public void HandleSwitchToCreatePage()
     {
         SwitchPage("CreateRoomPage");

@@ -9,7 +9,7 @@ public class GamePendingPageController : MonoBehaviour
 
     void Start()
     {
-        NetworkManager.instance.UpdateGameStateEvent += OnJoinTokenChanged;;
+        NetworkManager.instance.UpdateGameStateEvent += OnJoinTokenChanged;
         textField.text = PersistantStats.joinToken;
     }
 
