@@ -6,6 +6,7 @@ using UnityEngine;
 public class UnitSoundController : MonoBehaviour
 {
     public AudioEvent onHitSound;
+    public AudioEvent footstepSound;
 
     private AudioSource audioSource;
 
@@ -18,5 +19,15 @@ public class UnitSoundController : MonoBehaviour
     public void Hit()
     {
         onHitSound.Play(audioSource);
+    }
+
+    public void FootL()
+    {
+        footstepSound.Play(audioSource);
+    }
+
+    public void FootR()
+    {
+        footstepSound.Play(audioSource);
     }
 }
