@@ -218,6 +218,7 @@ GameObject:
   - component: {fileID: 471166}
   - component: {fileID: 736146228651930945}
   - component: {fileID: 4088193424864252215}
+  - component: {fileID: 6512664418313792384}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Tower
@@ -271,6 +272,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6512664418313792384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b57c04730e38eb43a53eddd02cf54b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1000
+  maxHealth: 1000
+  healthBarPrefab: {fileID: 377040851617020992, guid: b8b7c5d8732ce5446a6abc8067762a53,
+    type: 3}
+  scale: 5
+  offset: {x: 0, y: 9.8, z: 0}
+  alwaysShowHealth: 1
 --- !u!1 &171538
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +598,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47900747}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 13, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 782560963}
@@ -611,7 +631,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 782560962}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.42283913, y: -0.5717529, z: -0.4424957, w: 0.54635453}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -690,4 +710,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCamera: {fileID: 0}
-  gameController: {fileID: 0}
+  tracking: 1
