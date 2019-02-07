@@ -5,7 +5,7 @@
 // - no lightmap support
 // - no per-material color
 
-Shader "Unlit/TransparentAlphaMask" {
+Shader "Fader Shader" {
 Properties {
     _MainTex ("Base (RGB)", 2D) = "white" {}
     _AlphaTex ("Alpha mask (R)", 2D) = "white" {}
