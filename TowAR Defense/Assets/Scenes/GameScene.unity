@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -578,9 +578,9 @@ Transform:
   m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children:
   - {fileID: 1647147536}
+  - {fileID: 701290631}
   - {fileID: 40696776}
   - {fileID: 241711061}
-  - {fileID: 701290631}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3635,7 +3635,7 @@ Transform:
   - {fileID: 520250666}
   - {fileID: 1164346797}
   m_Father: {fileID: 40628487}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &748131174
 PrefabInstance:
@@ -5715,30 +5715,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.11697468
+      value: 0.056166723
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.41200912
+      value: -0.43990406
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.053427346
+      value: 0.027580103
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.90205926
+      value: 0.8958622
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
 --- !u!1001 &1336734797
@@ -5883,30 +5883,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
-    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
-      propertyPath: currentCamera
-      value: 
-      objectReference: {fileID: 2136702828}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.11497775
+      value: -0.054446146
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.39967704
+      value: -0.41541436
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.050609697
+      value: 0.02491872
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9080072
+      value: -0.9076594
       objectReference: {fileID: 0}
     - target: {fileID: 782560963, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782560966, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
+      propertyPath: currentCamera
+      value: 
+      objectReference: {fileID: 2136702828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f6b630159e6b34386dec2579f250b2, type: 3}
 --- !u!1 &1351436655 stripped
