@@ -10,6 +10,12 @@ public class RangedFloat
 {
     public float minValue;
     public float maxValue;
+
+    public RangedFloat(float min, float max)
+    {
+        minValue = min;
+        maxValue = max;
+    }
 }
 
 public class MinMaxRangeAttribute : PropertyAttribute
@@ -26,6 +32,7 @@ public class MinMaxRangeAttribute : PropertyAttribute
 
 #if UNITY_EDITOR
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(RangedFloat))]
 [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
 public class RangedFloatPropertyDrawer : PropertyDrawer
