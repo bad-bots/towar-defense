@@ -32,7 +32,7 @@ public class MinMaxRangeAttribute : PropertyAttribute
 
 #if UNITY_EDITOR
 
-#if UNITY_EDITOR
+
 [CustomPropertyDrawer(typeof(RangedFloat))]
 [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
 public class RangedFloatPropertyDrawer : PropertyDrawer
