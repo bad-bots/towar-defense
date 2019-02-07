@@ -52,6 +52,11 @@ public class UnitSpawner : MonoBehaviour
 
     public void SpawnUnit(NetworkManager.UnitSpawnData spawnData)
     {
+        if(m_gameBoard == null)
+          {
+            Debug.LogWarning("No Gameboard. UnitId: " + spawnData.unitId);
+            return;
+          }
         Debug.Log("Spawning");
         UnitType unitType = null;
         if (m_unitTypes.TryGetValue(spawnData.unitType, out unitType))

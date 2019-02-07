@@ -12,7 +12,6 @@ public class RangedFloat
     public float maxValue;
 }
 
-#if UNITY_EDITOR
 public class MinMaxRangeAttribute : PropertyAttribute
 {
     public readonly float min;
@@ -25,6 +24,7 @@ public class MinMaxRangeAttribute : PropertyAttribute
     }
 }
 
+#if UNITY_EDITOR
 
 [CustomPropertyDrawer(typeof(RangedFloat))]
 [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
