@@ -130,8 +130,8 @@ class MemDB {
     return this.Player.insert({
       socketId,
       playerNo,
-      castleHealth: 100,
-      doubloons: 500,
+      castleHealth: 1000,
+      doubloons: 10000,
       phonePosition,
       coolDowns: {
         knight: 0
