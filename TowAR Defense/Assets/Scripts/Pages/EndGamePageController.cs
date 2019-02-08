@@ -10,7 +10,7 @@ public class EndGamePageController : MonoBehaviour
     void Start()
     {
         // NetworkManager.instance.UpdateGameStateEvent += OnWinningPlayerChange;
-        
+
         //Find winning player and update text accordingly
         if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 1)
         {
@@ -19,7 +19,7 @@ public class EndGamePageController : MonoBehaviour
         }
         else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
         {
-            winningText.text = "You're Defeated!";
+            winningText.text = "You Lose!";
         }
         else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
         {
@@ -27,7 +27,7 @@ public class EndGamePageController : MonoBehaviour
         }
         else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
         {
-            winningText.text = "You're Defeated!";
+            winningText.text = "You Lose!";
         }
     }
 
@@ -40,7 +40,7 @@ public class EndGamePageController : MonoBehaviour
         }
         else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
         {
-            winningText.text = "You're Defeated!";
+            winningText.text = "You Lose!";
         }
         else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
         {
@@ -48,7 +48,7 @@ public class EndGamePageController : MonoBehaviour
         }
         else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
         {
-            winningText.text = "You're Defeated!";
+            winningText.text = "You Lose!";
         }
     }
 
