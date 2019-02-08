@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://10.1.41.126:8080/socket.io/?EIO=4&transport=websocket
+  url: ws://ec2-54-215-251-79.us-west-1.compute.amazonaws.com:80/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800
@@ -92,5 +92,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scene:
-    m_SceneAsset: {fileID: 102900000, guid: ce9a9c5973249de4f898865d370ce55f, type: 3}
-    m_SceneName: GameScene
+    m_SceneAsset: {fileID: 102900000, guid: 9c52602bd9e292e40806390cf678c298, type: 3}
+    m_SceneName: JoinGameScene

@@ -6,8 +6,10 @@ public class CastleHealthController : MonoBehaviour
 {
     public TextMesh castleHealth;
     public TextMesh enemyCastleHealth;
-    private Transform myTower;
-    private Transform enemyTower;
+    private GameObject myTower;
+    private GameObject enemyTower;
+    private HealthBehaviour castleHealthBar;
+    private HealthBehaviour enemyCastleHealthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -17,36 +19,44 @@ public class CastleHealthController : MonoBehaviour
         {
             if (towers[0].name == "Tower1")
             {
-                myTower = towers[0].transform;
-                enemyTower = towers[1].transform;
-            } else
-            {
-                myTower = towers[1].transform;
-                enemyTower = towers[0].transform;
-            }
-        } else
-        {
-            if (towers[0].name == "Tower1")
-            {
-                myTower = towers[1].transform;
-                enemyTower = towers[0].transform;
+                myTower = towers[0];
+                enemyTower = towers[1];
             }
             else
             {
-                myTower = towers[0].transform;
-                enemyTower = towers[1].transform;
+                myTower = towers[1];
+                enemyTower = towers[0];
             }
         }
+        else
+        {
+            if (towers[0].name == "Tower1")
+            {
+                myTower = towers[1];
+                enemyTower = towers[0];
+            }
+            else
+            {
+                myTower = towers[0];
+                enemyTower = towers[1];
+            }
+        }
+
+        castleHealth = myTower.GetComponentInChildren<TextMesh>();
+        enemyCastleHealth = enemyTower.GetComponentInChildren<TextMesh>();
+        castleHealthBar = myTower.GetComponent<HealthBehaviour>();
+        enemyCastleHealthBar = enemyTower.GetComponent<HealthBehaviour>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        myTower.gameObject.GetComponentInChildren<TextMesh>().text =
-            GameController.instance.castleHealth.ToString();
+        castleHealth.text = GameController.instance.castleHealth.ToString();
+        enemyCastleHealth.text = GameController.instance.enemyCastleHealth.ToString();
 
-        enemyTower.gameObject.GetComponentInChildren<TextMesh>().text =
-            GameController.instance.enemyCastleHealth.ToString();
+        castleHealthBar.health = GameController.instance.castleHealth;
+        enemyCastleHealthBar.health = GameController.instance.enemyCastleHealth;
+
     }
 
 }

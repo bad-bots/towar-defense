@@ -57,7 +57,7 @@ module.exports = io => {
         }
 
         io.to(socket.id).emit("start", {
-          enemyCastleHealth: 10,
+          enemyCastleHealth: 1000,
           ...player
         });
         gameState.autoGenDoubloons(io, gameRoom);

@@ -13,7 +13,7 @@ Player.createPlayer = function(playerNo, socketId, phonePosition) {
     return this.insert({
       socketId,
       playerNo,
-      castleHealth: 10,
+      castleHealth: 1000,
       doubloons: 10000,
       phonePosition,
       coolDowns: {

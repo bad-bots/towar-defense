@@ -163,10 +163,6 @@ class GameState {
       this.resetDebugRoom(gameRoom.roomName);
     } else {
       // persist to db/delete game room here
-      Player.destroyPlayer(gameRoom.player1);
-      Player.destroyPlayer(gameRoom.player2);
-      gameRoom.player1 = null;
-      gameRoom.player2 = null;
     }
   }
 
