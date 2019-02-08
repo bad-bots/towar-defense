@@ -1,6 +1,6 @@
-const loki = require("lokijs");
-const inMemDb = new loki("games.json");
-
+const Room = require("./rooms");
+const Player = require("./players");
+const Unit = require("./units");
 /**
  *  GameRoom = {
  *  id: 1 //auto created
@@ -48,116 +48,43 @@ const inMemDb = new loki("games.json");
  * }, {...})
  */
 
-class MemDB {
+class GameState {
   constructor() {
-    this.Player = inMemDb.addCollection("player");
-    this.Spectator = inMemDb.addCollection("spectators");
-    this.Room = inMemDb.addCollection("rooms");
-    this.RoomId = inMemDb.addCollection("roomIds");
-    this.Unit = inMemDb.addCollection("units");
-    this.JoinToken = inMemDb.addCollection("joinTokens");
-
-    this.debugRoom = this.createGameRoom("debug", "debug");
-    this.debugAIRoom = this.createGameRoom("debugAI", "debugAI");
+    this.debugRoom = Room._createGameRoom("debug", "debug");
+    this.debugAIRoom = Room._createGameRoom("debugAI", "debugAI");
   }
 
-  resetDebugRoom() {
-    this.Room.findAndRemove({roomId: this.debugRoom.roomId});
-    this.debugRoom = this.createGameRoom('debug', 'debug');
-  }
-
-  // Room Methods
-  getRoomId(roomName) {
-    let roomId;
-    while (!roomId) {
-      const temp =
-        "rId:" +
-        Math.random()
-          .toString(36)
-          .substring(2);
-      const roomIdExists = this.RoomId.findOne({ roomId: temp });
-      if (!roomIdExists) {
-        roomId = temp;
-      }
+  resetDebugRoom(type) {
+    const roomType = type === "AI" ? "debugAIRoom" : "debugRoom";
+    Room.findAndRemove({ roomId: this[roomType].roomId });
+    const name = type === "AI" ? "debugAI" : "debug";
+    if (type === "AI") {
+      clearInterval(this[roomType].autoSpawnInterval);
+      this.autoSpawnInterval = null;
     }
-    this.RoomId.insert({ roomId, roomName });
-    return roomId;
+    this[roomType] = Room._createGameRoom(name, name);
   }
 
-  genJoinToken(roomName) {
-    let joinToken;
-    while (!joinToken) {
-      const temp = Math.random()
-        .toString(36)
-        .substring(8);
-      const tokenFound = this.JoinToken.findOne({ token: temp });
-      if (!tokenFound) {
-        joinToken = temp;
-      }
-    }
-    this.JoinToken.insert({ token: joinToken, roomName });
-    return joinToken;
+  getAllGameRoomIds(rooms) {
+    return Object.keys(rooms).filter(room => room.includes("rId:"));
   }
 
-  createGameRoom(roomName, joinToken = null) {
-    const roomId = this.getRoomId(roomName);
-    joinToken = joinToken || this.genJoinToken(roomName);
+  getLatestRoom(rooms) {
+    const roomIds = this.getAllGameRoomIds(rooms);
+    let latestGame;
+    let createdTime = -Infinity;
 
-    return this.Room.insert({
-      roomId,
-      joinToken,
-      roomName,
-      gameStatus: "pending",
-      winner: null,
-      player1: null,
-      player2: null,
-      spectators: [],
-      units: [],
-      interval: null
-    });
-  }
-
-  getRoomByToken(joinToken) {
-    return this.Room.findOne({ joinToken });
-  }
-
-  getRoomByRoomId(roomId) {
-    return this.Room.findOne({ roomId });
-  }
-
-  // Player Methods
-  createPlayer(playerNo, socketId, phonePosition) {
-    return this.Player.insert({
-      socketId,
-      playerNo,
-      castleHealth: 1000,
-      doubloons: 1000,
-      phonePosition,
-      coolDowns: {
-        knight: 0
+    roomIds.forEach(roomId => {
+      const gameRoom = Room.getRoomByRoomId(roomId);
+      if (gameRoom && gameRoom.meta.created > createdTime) {
+        latestGame = gameRoom;
+        createdTime = gameRoom.meta.created;
       }
     });
+
+    return latestGame;
   }
 
-  createSpectator(socketId) {
-    return this.Spectator.insert({
-      socketId
-    });
-  }
-
-  getPlayer(socketId) {
-    return this.Player.findOne({ socketId });
-  }
-
-  destroyPlayer(socketId) {
-    this.Player.findAndRemove({ socketId });
-  }
-
-  destorySpectator(socketId) {
-    this.Spectator.findAndRemove({ socketId });
-  }
-
-  // Game methods
   startGame(gameRoom) {
     gameRoom.gameStatus = "inPlay";
   }
@@ -168,71 +95,115 @@ class MemDB {
 
   endGame(gameRoom, playerNo) {
     gameRoom.gameStatus = "finished";
-    gameRoom.winner = playerNo
+    gameRoom.winner = playerNo;
   }
 
-  destroyGame(roomId) {
-    this.Room.findAndRemove({ roomId });
+  clientAlreadyJoined(gameRoom, socketId) {
+    return (
+      (gameRoom.player1 && gameRoom.player1.socketId === socketId) ||
+      (gameRoom.player2 && gameRoom.player2.socketId === socketId)
+    );
   }
 
-  // Unit methods
-  unitCost(type) {
-    switch (type) {
-      case "archer":
-        return 100;
-      case "knight":
-        return 100;
-      case "phallanx":
-        return 100;
-      default:
-        return 100;
+  getPlayerNo(gameRoom) {
+    if (gameRoom.player1 === null) {
+      return 1;
+    } else if (gameRoom.player2 === null) {
+      return 2;
+    } else {
+      return 3;
     }
   }
 
-  unitDamage(type) {
-    switch (type) {
-      case "archer":
-        return 145;
-      case "knight":
-        return 115;
-      case "phallanx":
-        return 80;
-      default:
-        return 100;
+  autoSpawnUnits(io, gameRoom, playerNo, spawnInterval = 1500) {
+    const unitTypes = ["knight", "archer", "phallanx"];
+
+    gameRoom.autoSpawnInterval = setInterval(() => {
+      const [position, rotation] = this.getSpawnPosAndRot(playerNo);
+      const unitType = unitTypes[Math.floor(Math.random() * 3)];
+      const unit = this.spawnUnit(playerNo, unitType)
+      gameRoom.units.push(unit);
+      io.to(gameRoom.roomId).emit("spawn", unit);
+    }, spawnInterval);
+  }
+
+  getSpawnPosAndRot(playerNo) {
+    const position = playerNo === 1 ? [0, 0, 3.5] : [0, 0, -3.5];
+    const rotation = playerNo === 1 ? [0, 180, 0] : [0, 0, 0];
+    return [position, rotation];
+  }
+
+  spawnUnit(playerNo, unitType) {
+    const [position, rotation] = this.getSpawnPosAndRot(playerNo);
+    const unit = Unit.createUnit(playerNo, unitType, position, rotation);
+    unit.unitId = unit["$loki"];
+    return unit;
+  }
+
+  autoGenDoubloons(io, gameRoom) {
+    gameRoom.interval = setInterval(() => {
+      gameRoom.player1.doubloons += 100;
+      gameRoom.player2.doubloons += 100;
+      io.to(gameRoom.player1.socketId).emit("updatePlayerDoubloons", {
+        playerNo: 1,
+        doubloons: gameRoom.player1.doubloons
+      });
+      io.to(gameRoom.player2.socketId).emit("updatePlayerDoubloons", {
+        playerNo: 2,
+        doubloons: gameRoom.player2.doubloons
+      });
+    }, 5000);
+  }
+
+  endGameCleanUp(gameRoom) {
+    clearInterval(gameRoom.interval);
+    gameRoom.interval = null;
+
+    if (gameRoom.roomName === "debug" || gameRoom.roomName === "debugAI") {
+      this.resetDebugRoom(gameRoom.roomName);
+    } else {
+      // persist to db/delete game room here
     }
   }
 
-  unitHealth(type) {
-    switch (type) {
-      case "archer":
-        return 325;
-      case "knight":
-        return 600;
-      case "phallanx":
-        return 800;
-      default:
-        return 600;
-    }
-  }
+  clientLeave(rooms, socket) {
+    Player.destroyPlayer(socket.id);
 
-  createUnit(playerNo, unitType, position, rotation) {
-    let health = this.unitHealth(unitType)
-    return this.Unit.insert({
-      health,
-      position,
-      rotation,
-      unitType,
-      playerNo,
-      currentTarget: null,
-      spawnTime: 5000
+    const roomIds = this.getAllGameRoomIds(rooms);
+    roomIds.forEach(roomId => {
+      socket.leave(roomId);
+      const gameRoom = Room.getRoomByRoomId(roomId);
+      if (gameRoom) {
+        this.clientLeaveCleanUp(gameRoom, socket.id);
+      }
     });
   }
 
-  destroyUnit(unitId) {
-    this.Unit.findAndRemove({ id: unitId });
+  clientLeaveCleanUp(gameRoom, socketId) {
+    if (gameRoom.player1 && gameRoom.player1.socketId === socketId) {
+      gameRoom.player1 = null;
+    }
+    if (gameRoom.player2 && gameRoom.player2.socketId === socketId) {
+      gameRoom.player2 = null;
+    }
+    gameRoom.spectators = gameRoom.spectators.filter(
+      spectator => spectator.socketId !== socketId
+    );
+
+    if (
+      gameRoom.player1 === null &&
+      gameRoom.player2 === null &&
+      gameRoom.spectators.length === 0
+    ) {
+      if (gameRoom.roomName === "debug" || gameRoom.roomName === "debugAI") {
+        this.resetDebugRoom(gameRoom.roomName);
+      } else {
+        Room.destroyRoom(gameRoom.roomId);
+      }
+    }
   }
 }
 
-const db = new MemDB();
+const gameState = new GameState();
 
-module.exports = db;
+module.exports = { gameState, Room, Player, Unit };

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 // Add all pages here;
 // All pages are instantiated from the unity editor.
@@ -74,6 +75,7 @@ public class PageController : MonoBehaviour
         {
             throw new System.Exception("Give Page Name " + Page + " Does not Exist");
         } else {
+            GetComponent<AudioSource>().Play();
             DisplayedPage.SetActive(false);
             DisplayedPage = newPage;
             DisplayedPage.SetActive(true);
