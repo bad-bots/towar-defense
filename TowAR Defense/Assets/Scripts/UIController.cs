@@ -9,7 +9,7 @@ public class UIController : MonoBehaviour
 
     public Button[] spawnUnitButtonsType;
     public Button spawnUnitButton;
-    public float cooldown = .5f;
+    public float cooldown = .25f;
     void Awake()
     {
         spawnUnitButtonsType = GetComponentsInChildren<Button>();
