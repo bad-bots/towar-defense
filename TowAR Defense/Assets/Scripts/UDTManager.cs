@@ -6,6 +6,7 @@ using Vuforia;
 public class UDTManager : MonoBehaviour, IUserDefinedTargetEventHandler
 {
     // global variables
+
     UserDefinedTargetBuildingBehaviour udt_targetBuildingBehavior;
 
     ObjectTracker objectTracker;
@@ -54,7 +55,6 @@ public class UDTManager : MonoBehaviour, IUserDefinedTargetEventHandler
 
     public void BuildTarget()
     {
-
         if(udt_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_HIGH) // if current frame quality is high
         {
             udt_targetBuildingBehavior.BuildNewTarget(targetCounter.ToString(), targetBehaviour.GetSize().x); // build new targetBehaviour with the width of our imagetarget

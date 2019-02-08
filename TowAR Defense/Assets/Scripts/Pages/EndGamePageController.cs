@@ -10,12 +10,46 @@ public class EndGamePageController : MonoBehaviour
     void Start()
     {
         // NetworkManager.instance.UpdateGameStateEvent += OnWinningPlayerChange;
-        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+
+        //Find winning player and update text accordingly
+        if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 1)
+        {
+            winningText.text = "You Win!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
+        {
+            winningText.text = "You Lose!";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
+        {
+            winningText.text = "You Win!";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
+        {
+            winningText.text = "You Lose!";
+        }
     }
 
     void OnWinningPlayerChange()
     {
-        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        //Find winning player and update text accordingly
+        if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 1)
+        {
+            winningText.text = "You Win!";
+        }
+        else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
+        {
+            winningText.text = "You Lose!";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
+        {
+            winningText.text = "You Win!";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
+        {
+            winningText.text = "You Lose!";
+        }
     }
 
     public void PlayAgain()
