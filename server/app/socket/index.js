@@ -1,24 +1,5 @@
-const gameState = require("../memDb");
-
-const getAllGameRoomIds = rooms => {
-  return Object.keys(rooms).filter(room => room.includes("rId:"));
-};
-
-const getLatestRoom = rooms => {
-  const roomIds = getAllGameRoomIds(rooms);
-  let latestGame;
-  let createdTime = -Infinity;
-
-  roomIds.forEach(roomId => {
-    const gameRoom = gameState.getRoomByRoomId(roomId);
-    if (gameRoom && gameRoom.meta.created > createdTime) {
-      latestGame = gameRoom;
-      createdTime = gameRoom.meta.created;
-    }
-  });
-
-  return latestGame;
-};
+const { gameState, Room, Player, Unit } = require("../memDb");
+const utils = require("./socketUtils");
 
 module.exports = io => {
   io.on("connection", socket => {
@@ -26,91 +7,62 @@ module.exports = io => {
       `A socket connection to npm server has been made: ${socket.id}`
     );
 
-    // Create room and add room creator as P1
+    // Create room given a roomName and add room creator as P1
     socket.on("create", roomName => {
-      // Do not create debug room  because it is created on server init.
-      if (roomName === "debug" || roomName === "debugAI") {
-        return;
-      }
+      const phonePosition = [1, 1, 1]; // <- not correct. Position comes from client
+      const gameRoom = Room.createGameRoom(roomName);
 
-      const gameRoom = gameState.createGameRoom(roomName);
-
-      const player1 = gameState.createPlayer(1, socket.id, [1, 1, 1]);
+      const player1 = Player.createPlayer(1, socket.id, phonePosition);
       gameRoom.player1 = player1;
-
       socket.join(gameRoom.roomId);
-
-      socket.emit("init", {joinToken: gameRoom.joinToken});
-      console.log(`Client ${socket.id} has created room "${roomName}"`);
+      socket.emit("init", { joinToken: gameRoom.joinToken });
     });
 
+    // Join room with joinToken
     socket.on("join", joinToken => {
-      console.log(
-        `Client ${socket.id} attempting to join game with token: ${joinToken}`
-      );
-
-      const gameRoom = gameState.getRoomByToken(joinToken);
+      const gameRoom = Room.getRoomByToken(joinToken);
       if (!gameRoom) {
         socket.emit("incorrectGameToken");
         return;
       }
 
       // Prevent client from joining game twice
-      if (
-        (gameRoom.player1 && gameRoom.player1.socketId === socket.Id) ||
-        (gameRoom.player2 && gameRoom.player2.socketId === socket.id)
-      ) {
+      if (gameState.clientAlreadyJoined(gameRoom, socket.id)) {
         socket.emit("alreadyJoinedGame");
-        console.log(
-          `Client ${socket.id} attempting to join alreadyJoinedGame.`
-        );
         return;
       }
 
-      let playerAdded;
-
-      if (gameRoom.player1 === null) {
-        const player = gameState.createPlayer(1, socket.id, [0, 0, 0]);
-        gameRoom.player1 = player;
-        playerAdded = player;
-      } else if (gameRoom.player2 === null) {
-        const player = gameState.createPlayer(2, socket.id, [1, 1, 1]);
-        gameRoom.player2 = player;
-        playerAdded = player;
+      // Add player to game state and client to room.
+      const playerNo = gameState.getPlayerNo(gameRoom);
+      const phonePosition = [0, 0, 0]; // Not correct
+      const player = Player.createPlayer(playerNo, socket.id, phonePosition);
+      // Set player and join room
+      if (playerNo === 3) {
+        gameRoom.spectators.push(player);
       } else {
-        const specator = gameState.createSpectator(socket.id);
-        gameRoom.spectators.push(specator);
-        playerAdded = specator;
+        gameRoom["player" + playerNo] = player;
       }
-
       socket.join(gameRoom.roomId);
 
-      // If gameRoom is the debug game room, then add a player2, start the game
-      // Otherwise start the game if both p1 and p2 have joined.
+      // Start room
       if (joinToken === "debug" || joinToken === "debugAI") {
-        if (gameRoom.player2 === null) {
-          const player = gameState.createPlayer(2, null, [1, 1, 1]);
-          gameRoom.player2 = player;
+        // Fill enemy player with bot.
+        const enemyPlayerNo = gameState.getPlayerNo(gameRoom);
+        if (enemyPlayerNo !== 3) {
+          const debugEnemyPlayer = Player.createPlayer(enemyPlayerNo, 'debugAI');
+          gameRoom["player" + enemyPlayerNo] = debugEnemyPlayer;
+          if (joinToken === "debugAI") {
+            gameState.autoSpawnUnits(io, gameRoom, debugEnemyPlayer.playerNo, 2000);
+          }
         }
+
         io.to(socket.id).emit("start", {
-          enemyCastleHealth: gameRoom.player2.castleHealth,
-          ...playerAdded
+          enemyCastleHealth: 10,
+          ...player
         });
-        if (joinToken === "debugAI") {
-          const unitTypes = ["knight", "archer", "phallanx"];
-          setInterval(() => {
-            const position = [0, 0, -3.5];
-            const rotation = [0, 0, 0];
-            const unit = gameState.createUnit(
-              2,
-              unitTypes[Math.floor(Math.random() * 3)],
-              position,
-              rotation
-            );
-            io.to(gameRoom.roomId).emit("spawn", unit);
-          }, 1500);
-        }
-      } else if (gameRoom.player1 && gameRoom.player2) {
+        gameState.autoGenDoubloons(io, gameRoom);
+      } // Start game if 2 players have joined
+      else if (gameRoom.player1 && gameRoom.player2) {
         io.to(gameRoom.player1.socketId).emit("start", {
           enemyCastleHealth: gameRoom.player2.castleHealth,
           ...gameRoom.player1
@@ -119,33 +71,20 @@ module.exports = io => {
           enemyCastleHealth: gameRoom.player1.castleHealth,
           ...gameRoom.player2
         });
-
-        gameRoom.interval = setInterval(() => {
-          gameRoom.player1.doubloons += 100;
-          gameRoom.player2.doubloons += 100;
-          io.to(gameRoom.player1.socketId).emit("updatePlayerDoubloons", {
-            playerNo: 1,
-            doubloons: gameRoom.player1.doubloons
-          });
-          io.to(gameRoom.player2.socketId).emit("updatePlayerDoubloons", {
-            playerNo: 2,
-            doubloons: gameRoom.player2.doubloons
-          });
-        }, 5000);
+        gameState.autoGenDoubloons(io, gameRoom);
       }
-      console.log(`Client ${socket.id} has joined game. Game has started.`);
     });
 
     socket.on("spawn", unitType => {
       // Get latest game room
-      const gameRoom = getLatestRoom(socket.rooms);
+      const gameRoom = gameState.getLatestRoom(socket.rooms);
       if (!gameRoom) {
         socket.emit("matchNotFound");
         console.log("room not found");
         return;
       }
 
-      // Get player requesting unit spawn from socket.id
+      // Get player requesting attack
       let player;
       if (socket.id === gameRoom.player1.socketId) {
         player = gameRoom.player1;
@@ -158,22 +97,11 @@ module.exports = io => {
       }
 
       // Spawn unit if player has enough doubloons
-      const cost = gameState.unitCost(unitType);
+      const cost = Unit.unitCost(unitType);
       if (player.doubloons >= cost) {
-        // Set position if it is not provided
-        const position = player.playerNo === 1 ? [0, 0, 3.5] : [0, 0, -3.5];
-        const rotation = player.PlayerNo === 1 ? [0, 180, 0] : [0, 0, 0];
-
-        const unit = gameState.createUnit(
-          player.playerNo,
-          unitType,
-          position,
-          rotation
-        );
-        unit.unitId = unit["$loki"];
+        unit = gameState.spawnUnit(player.playerNo, unitType);
         player.doubloons -= cost;
         gameRoom.units.push(unit);
-
         // Update player doubloons
         // Spawn unit
         socket.emit("updatePlayerDoubloons", {
@@ -187,51 +115,40 @@ module.exports = io => {
     });
 
     socket.on("damageCastle", ({ unitType, attackedPlayerNo }) => {
-      // Get latest game room
-      console.log(socket.rooms);
-      const gameRoom = getLatestRoom(socket.rooms);
+      const gameRoom = gameState.getLatestRoom(socket.rooms);
       if (!gameRoom) {
-        socket.emit("match not found");
+        socket.emit("matchNotFound");
         console.log("room not found");
         return;
       }
-
-      const damage = gameState.unitDamage(unitType);
-
+      // Apply damage
+      const damage = Unit.unitDamage(unitType);
       const attackedPlayer = gameRoom["player" + attackedPlayerNo];
       attackedPlayer.castleHealth -= damage;
 
+      // Emit new castle health
       io.to(gameRoom.roomId).emit("damageCastle", {
         playerNo: attackedPlayer.playerNo,
         castleHealth: attackedPlayer.castleHealth
       });
 
       // Check to see if the game is over
-      // Otherwise emit new castleHealth
       if (attackedPlayer.castleHealth <= 0) {
         const winningPlayer = 3 - attackedPlayerNo;
         io.to(gameRoom.roomId).emit("endGame", { winningPlayer });
-        clearInterval(gameRoom.interval)
-        if (gameRoom.roomName === 'debug') {
-          gameState.resetDebugRoom();
-        } // else persist to db/delete game room
-        else {
-          gameRoom.player1 = null;
-          gameRoom.player2 = null;
-        }
+        gameState.endGameCleanUp(gameRoom);
       }
     });
 
     socket.on("damageUnit", ({ attackerId, defenderId }) => {
-      // Get latest game room
-      const gameRoom = getLatestRoom(socket.rooms);
+      const gameRoom = gameState.getLatestRoom(socket.rooms);
       if (!gameRoom) {
         socket.emit("match not found");
         console.log("room not found");
         return;
       }
-
-      // find attacker and defender
+      console.log(attackerId);
+      // Find attacker and defender
       const attacker = gameRoom.units.find(unit => unit.$loki === +attackerId);
       if (!attacker) {
         console.log("Attacking unit not found");
@@ -243,8 +160,8 @@ module.exports = io => {
         return;
       }
 
-      // calculate new unit health
-      const damage = gameState.unitDamage(attacker.unitType);
+      // Calculate new unit health
+      const damage = Unit.unitDamage(attacker.unitType);
       defender.health -= damage;
 
       console.log(
@@ -253,44 +170,32 @@ module.exports = io => {
         } hp`
       );
 
-      // emit new unit health
+      // Emit new unit health
       io.to(gameRoom.roomId).emit("damageUnit", {
         playerNo: defender.playerNo,
         health: defender.health,
         unitId: defender.$loki
       });
 
-      // remove unit if it's health is 0 or less
+      // Destroy unit
+      if (defender.health <= 0) {
+        Unit.destroyUnit(defender.$loki);
+        gameRoom.units = gameRoom.units.filter(
+          unit => unit.$loki !== defender.$loki
+        );
+      }
     });
 
+    // Remove every instance of the client in gameState
+    // Client could be a player or a spectator
     socket.on("leave", () => {
-      // Remove every instance of the client in gameState
-      // Client could be a player or a spectator
-      // gameState.destroyPlayer(socket.id);
-      // gameState.destorySpectator(socket.id);
-
-      console.log("leaving");
-      const roomNames = getAllGameRoomIds(socket.rooms);
-      roomNames.forEach(roomName => {
-        socket.leave(roomName);
-        const gameRoom = gameState.getRoomByRoomId(roomName);
-
-        // Destroy gameRoom if there are no players left;
-      });
+      // Remove player from database
+      gameState.clientLeave(socket.rooms, socket);
+      console.log(`Connection ${socket.id} has left a game`);
     });
 
     socket.on("disconnect", () => {
-      const roomIds = getAllGameRoomIds(socket.rooms);
-      roomIds.forEach(roomId => {
-        socket.leave(roomId);
-        const gameRoom = gameState.getRoomByRoomId(roomId);
-        if (gameRoom.roomName === "debug") {
-          gameState.resetDebugRoom();
-        }
-
-        // Destroy gameRoom if there are no players left;
-      });
-
+      gameState.clientLeave(socket.rooms, socket);
       console.log(`Connection ${socket.id} has left the building`);
     });
   });
