@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Phallanx
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 100000, guid: c1ece6a75c5792b44994826b829185a5, type: 3}
-  speed: 0.8
+  speed: 0.6
   maxHealth: 200
   attackRange: 0.5
   attackDamage: 4

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 100000, guid: 9525858720ba8304db1453bdfd346a52, type: 3}
-  speed: 1
+  speed: 0.7
   maxHealth: 200
   attackRange: 0.5
   attackDamage: 6

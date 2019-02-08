@@ -5,11 +5,11 @@ const Unit = db.addCollection("units");
 Unit.unitCost = function(type) {
   switch (type) {
     case "archer":
-      return 100;
-    case "knight":
       return 150;
+    case "knight":
+      return 100;
     case "phallanx":
-      return 200;
+      return 125;
     default:
       return 100;
   }
@@ -18,19 +18,33 @@ Unit.unitCost = function(type) {
 Unit.unitDamage = function(type) {
   switch (type) {
     case "archer":
-      return 100;
-    case "knight":
       return 150;
+    case "knight":
+      return 125;
     case "phallanx":
-      return 200;
+      return 100;
     default:
       return 100;
   }
 };
 
+getMaxHealth = function(type) {
+  switch (type) {
+    case "archer":
+      return 500;
+    case "knight":
+      return 750;
+    case "phallanx":
+      return 1050;
+    default:
+      return 500;
+  }
+};
+
 Unit.createUnit = function(playerNo, unitType, position, rotation) {
+  let health = getMaxHealth(unitType);
   return this.insert({
-    health: 200,
+    health,
     position,
     rotation,
     unitType,
