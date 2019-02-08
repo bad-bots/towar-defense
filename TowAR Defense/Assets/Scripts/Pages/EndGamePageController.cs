@@ -9,13 +9,56 @@ public class EndGamePageController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("isPlayer1:");
+        Debug.Log(GameController.instance.isPlayer1);
         // NetworkManager.instance.UpdateGameStateEvent += OnWinningPlayerChange;
-        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 1)
+        {
+            winningText.text = "You Win!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
+        {
+            winningText.text = "You're Defeated!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
+        {
+            winningText.text = "You Win!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
+        {
+            winningText.text = "You're Defeated!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
     }
 
     void OnWinningPlayerChange()
     {
-        winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        Debug.Log("isPlayer1:");
+        Debug.Log(GameController.instance.isPlayer1);
+        if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 1)
+        {
+            winningText.text = "You Win!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 1)
+        {
+            winningText.text = "You're Defeated!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer == 2)
+        {
+            winningText.text = "You Win!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        else if(!GameController.instance.isPlayer1 && PersistantStats.winningPlayer != 2)
+        {
+            winningText.text = "You're Defeated!";
+            // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
+        }
+        // winningText.text = "Player " + PersistantStats.winningPlayer +" wins";
     }
 
     public void PlayAgain()
