@@ -7,9 +7,9 @@ Unit.unitCost = function(type) {
     case "archer":
       return 150;
     case "knight":
-      return 100;
-    case "phallanx":
       return 125;
+    case "phallanx":
+      return 175;
     default:
       return 100;
   }
@@ -18,11 +18,11 @@ Unit.unitCost = function(type) {
 Unit.unitDamage = function(type) {
   switch (type) {
     case "archer":
-      return 150;
+      return 140;
     case "knight":
       return 125;
     case "phallanx":
-      return 100;
+      return 105;
     default:
       return 100;
   }
@@ -31,11 +31,11 @@ Unit.unitDamage = function(type) {
 getMaxHealth = function(type) {
   switch (type) {
     case "archer":
-      return 500;
+      return 600;
     case "knight":
-      return 750;
+      return 950;
     case "phallanx":
-      return 1050;
+      return 1250;
     default:
       return 500;
   }

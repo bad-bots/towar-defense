@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 100000, guid: 9525858720ba8304db1453bdfd346a52, type: 3}
   speed: 0.7
-  maxHealth: 200
+  maxHealth: 850
   attackRange: 0.5
   attackDamage: 6
   attackSpeed: 1

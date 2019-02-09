@@ -31,11 +31,13 @@ public class UnitMovementBehaviour : MonoBehaviour
             if (target.CompareTag("Tower") || !isInRange)
             {
                 transform.localPosition += transform.forward * unitData.type.speed * Time.deltaTime;
+                m_Animator.SetFloat("speed", unitData.type.speed);
                 m_Animator.SetBool("Moving", true);
             }
             else
             {
                 m_Animator.SetBool("Moving", false);
+                m_Animator.SetFloat("speed", 0);
                 TryAttackUnit(target.GetComponent<UnitData>());
             }
         }

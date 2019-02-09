@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Archer
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 100000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
-  speed: 0.8
-  maxHealth: 425
+  speed: 0.9
+  maxHealth: 550
   attackRange: 4.5
   attackDamage: 8
   attackSpeed: 1
