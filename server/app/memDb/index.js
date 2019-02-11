@@ -128,7 +128,8 @@ class GameState {
   }
 
   getSpawnPosAndRot(playerNo) {
-    const position = playerNo === 1 ? [0, 0, 3.5] : [0, 0, -3.5];
+    const xPos = (Math.random() - .5) * 3;
+    const position = playerNo === 1 ? [xPos, 0, 3.5] : [xPos, 0, -3.5];
     const rotation = playerNo === 1 ? [0, 180, 0] : [0, 0, 0];
     return [position, rotation];
   }
