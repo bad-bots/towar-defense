@@ -151,7 +151,7 @@ PlayerSettings:
     Android: com.badbots.towardefense
   buildNumber: {}
   AndroidBundleVersionCode: 2
-  AndroidMinSdkVersion: 24
+  AndroidMinSdkVersion: 21
   AndroidTargetSdkVersion: 26
   AndroidPreferredInstallLocation: 1
   aotOptions: 
