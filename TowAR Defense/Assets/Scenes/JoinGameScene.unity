@@ -4496,11 +4496,6 @@ PrefabInstance:
       propertyPath: gameScene.m_SceneName
       value: GameScene
       objectReference: {fileID: 0}
-    - target: {fileID: 3953003761406853727, guid: 8a6a56c1694ccea4788970d7ccc3ec91,
-        type: 3}
-      propertyPath: url
-      value: ws://10.1.41.126:8080/socket.io/?EIO=4&transport=websocket
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5371901635332089396, guid: 8a6a56c1694ccea4788970d7ccc3ec91, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8a6a56c1694ccea4788970d7ccc3ec91, type: 3}
