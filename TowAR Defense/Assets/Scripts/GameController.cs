@@ -75,6 +75,13 @@ public class GameController : MonoBehaviour
 
     #region Public Methods
 
+    /**
+     * @brief Initialize the game controller with given player data
+     *
+     * @par This is a bunch of text describing what the funciton does
+     *
+     * @param playerData Information about this client's player
+     */
     public void Initialize(NetworkManager.PlayerJSON playerData)
     {
         doubloons = playerData.doubloons;

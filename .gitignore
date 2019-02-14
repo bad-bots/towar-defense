@@ -45,6 +45,9 @@ somedata16
 *.apk
 *.unitypackage
 
+# Doxygen
+docs/
+
 # Misc
 .DS_Store
 TempTextures/

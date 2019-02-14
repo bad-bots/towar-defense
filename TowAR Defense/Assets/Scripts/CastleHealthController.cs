@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * @brief A class for stuff and things
+ */
 public class CastleHealthController : MonoBehaviour
 {
     public TextMesh castleHealth;
